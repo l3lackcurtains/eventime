@@ -9,6 +9,9 @@ import {
 import Timer from "./timer";
 import Dash from "./dash";
 import Projects from "./projects";
+import Clients from "./clients";
+import Reports from "./reports";
+import SingleProject from "./projects/singleProject";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -57,21 +60,21 @@ class Dashboard extends Component {
                 <span className="nav-text">Projects</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="4">
-              <Icon type="file" />
-              <span className="nav-text">Schedule</span>
-            </Menu.Item>
             <Menu.Item key="5">
-              <Icon type="file" />
-              <span className="nav-text">Clients</span>
+              <NavLink to="/clients">
+                <Icon type="file" />
+                <span className="nav-text">Clients</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="7">
+              <NavLink to="/reports">
+                <Icon type="file" />
+                <span className="nav-text">Reports</span>
+              </NavLink>
             </Menu.Item>
             <Menu.Item key="6">
               <Icon type="file" />
               <span className="nav-text">Invoices</span>
-            </Menu.Item>
-            <Menu.Item key="7">
-              <Icon type="file" />
-              <span className="nav-text">Reports</span>
             </Menu.Item>
             <Menu.Item key="8">
               <Icon type="file" />
@@ -81,14 +84,17 @@ class Dashboard extends Component {
         </Sider>
         <Layout>
           <Header style={{ background: "#fff", padding: 0 }} />
-          <Content style={{ margin: "0 16px" }}>
-            <div style={{ padding: "36px 48px", minHeight: 360 }}>
-              <Switch>
-                <Route path="/" exact component={Dash} />
-                <Route path="/timer" component={Timer} />
-                <Route path="/projects" component={Projects} />
-              </Switch>
-            </div>
+          <Content
+            style={{ margin: "0 16px", padding: "36px 48px", minHeight: 360 }}
+          >
+            <Switch>
+              <Route path="/" exact component={Dash} />
+              <Route path="/timer" component={Timer} />
+              <Route path="/projects" component={Projects} />
+              <Route path="/project/:project" component={SingleProject} />
+              <Route path="/clients" component={Clients} />
+              <Route path="/reports" component={Reports} />
+            </Switch>
           </Content>
           <Footer style={{ textAlign: "center" }}>
             Ant Design ©2018 Created by Ant UED
