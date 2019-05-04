@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { Table, Dropdown, Button, Menu, Modal } from "antd";
-import AddClient from "./addClient";
+import { Table, Dropdown, Button, Menu, Modal, Card, Row, Col } from "antd";
+import styled from "styled-components";
+
+import AddExpense from "./addExpenses";
+import ExpenseChart from "./expenseChart";
 
 const menu = (
   <Menu>
-    <Menu.Item>Archive</Menu.Item>
-    <Menu.Item>Unarchive</Menu.Item>
+    <Menu.Item>Delete</Menu.Item>
   </Menu>
 );
 
@@ -54,7 +56,7 @@ const rowSelection = {
   hideDefaultSelections: true
 };
 
-class Clients extends Component {
+class Expenses extends Component {
   state = {
     modal1Visible: false,
     selectedRowKeys: [],
@@ -89,13 +91,28 @@ class Clients extends Component {
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div>
-        <Button
-          type="primary"
-          icon="plus"
-          onClick={() => this.setModal1Visible(true)}
+        <Card
+          title={
+            <StyledCardTitle>
+              <h1>Expenses</h1>
+              <Button
+                type="primary"
+                icon="plus"
+                size="large"
+                onClick={() => this.setModal1Visible(true)}
+              >
+                Add Expense
+              </Button>
+            </StyledCardTitle>
+          }
         >
-          Add Client
-        </Button>
+          <Row>
+            <Col sm={12}>
+              <ExpenseChart />
+            </Col>
+            <Col sm={12}>sd</Col>
+          </Row>
+        </Card>
 
         <div
           className="list"
@@ -125,18 +142,28 @@ class Clients extends Component {
           />
         </div>
         <Modal
-          title="Add a new Client"
+          title="Add a new Expense"
           style={{ top: 20 }}
           visible={this.state.modal1Visible}
           onOk={() => this.setModal1Visible(false)}
           onCancel={() => this.setModal1Visible(false)}
           width={750}
         >
-          <AddClient />
+          <AddExpense />
         </Modal>
       </div>
     );
   }
 }
 
-export default Clients;
+const StyledCardTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    padding: 8px 0;
+  }
+`;
+
+export default Expenses;

@@ -12,6 +12,7 @@ import Projects from "./projects";
 import Clients from "./clients";
 import Reports from "./reports";
 import SingleProject from "./projects/singleProject";
+import Expenses from "./expenses";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -77,8 +78,10 @@ class Dashboard extends Component {
               <span className="nav-text">Invoices</span>
             </Menu.Item>
             <Menu.Item key="8">
-              <Icon type="file" />
-              <span className="nav-text">Expenses</span>
+              <NavLink to="/expenses">
+                <Icon type="file" />
+                <span className="nav-text">Expenses</span>
+              </NavLink>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -94,6 +97,7 @@ class Dashboard extends Component {
               <Route path="/project/:project" component={SingleProject} />
               <Route path="/clients" component={Clients} />
               <Route path="/reports" component={Reports} />
+              <Route path="/expenses" component={Expenses} />
             </Switch>
           </Content>
           <Footer style={{ textAlign: "center" }}>
