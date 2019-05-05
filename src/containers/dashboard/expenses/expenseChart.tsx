@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const data = [
   { name: "Group A", value: 400 },
@@ -32,22 +32,22 @@ const renderCustomizedLabel = (props: any) => {
 
 const ExpenseChart = () => {
   return (
-    <PieChart width={500} height={500}>
-      <Pie
-        data={data}
-        cx={200}
-        cy={200}
-        labelLine={false}
-        label={renderCustomizedLabel}
-        outerRadius={120}
-        fill="#8884d8"
-        dataKey="value"
-      >
-        {data.map((entry: any, index: number) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
+    <ResponsiveContainer width="100%" height={200}>
+      <PieChart>
+        <Pie
+          data={data}
+          labelLine={false}
+          label={renderCustomizedLabel}
+          outerRadius={100}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {data.map((entry: any, index: number) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+      </PieChart>
+    </ResponsiveContainer>
   );
 };
 

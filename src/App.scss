@@ -1,12 +1,13 @@
 @font-face {
   font-family: 'Noir';
-  src: local('Noir'), url(./assets/fonts/NoirPro/NoirPro-Medium.woff) format('woff');
+  src: url(./assets/fonts/NoirPro/NoirPro-Medium.woff) format('woff'),
+  url(./assets/fonts/NoirPro/NoirPro-Bold.woff) format('woff'),
+  url(./assets/fonts/NoirPro/NoirPro-Light.woff) format('woff');
 }
 
 * {
   font-family: 'Noir', 'Open Sans';
 }
-
 
 ::-webkit-scrollbar {
   width: 0.6em;

@@ -13,6 +13,7 @@ import Clients from "./clients";
 import Reports from "./reports";
 import SingleProject from "./projects/singleProject";
 import Expenses from "./expenses";
+import Invoices from "./invoices";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -73,14 +74,17 @@ class Dashboard extends Component {
                 <span className="nav-text">Reports</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="6">
-              <Icon type="file" />
-              <span className="nav-text">Invoices</span>
-            </Menu.Item>
+
             <Menu.Item key="8">
               <NavLink to="/expenses">
                 <Icon type="file" />
                 <span className="nav-text">Expenses</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="9">
+              <NavLink to="/invoices">
+                <Icon type="file" />
+                <span className="nav-text">Invoices</span>
               </NavLink>
             </Menu.Item>
           </Menu>
@@ -98,6 +102,7 @@ class Dashboard extends Component {
               <Route path="/clients" component={Clients} />
               <Route path="/reports" component={Reports} />
               <Route path="/expenses" component={Expenses} />
+              <Route path="/invoices" component={Invoices} />
             </Switch>
           </Content>
           <Footer style={{ textAlign: "center" }}>

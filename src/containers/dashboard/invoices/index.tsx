@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Table, Dropdown, Button, Menu, Modal, Card, Row, Col } from "antd";
 import styled from "styled-components";
 
-import AddExpense from "./addExpenses";
-import ExpenseChart from "./expenseChart";
+import CreateInvoice from "./createInvoice";
+import InvoiceChart from "./invoiceChart";
 
 const menu = (
   <Menu>
@@ -13,91 +13,48 @@ const menu = (
 
 const columns = [
   {
-    title: "Expense",
-    dataIndex: "expense"
+    title: "Client",
+    dataIndex: "client"
   },
   {
-    title: "Project",
-    dataIndex: "project"
+    title: "Period",
+    dataIndex: "period"
   },
   {
-    title: "Member",
-    dataIndex: "member"
-  },
-  {
-    title: "Date",
-    dataIndex: "date"
+    title: "Duration",
+    dataIndex: "duration"
   },
   {
     title: "Amount",
     dataIndex: "amount"
+  },
+  {
+    title: "Issue Date",
+    dataIndex: "issueDate"
+  },
+  {
+    title: "Status",
+    dataIndex: "status"
   }
 ];
 const data = [
   {
     key: "1",
-    expense: "Entertainment - While working on the project",
-    project: "Time Management App",
-    member: "Madhav Poudel",
-    date: "May 2",
-    amount: 10000
+    client: "The Moisture Factory",
+    period: "May 1 to Dec 12",
+    duration: "23h 45m",
+    amount: 6780,
+    issueDate: "Dec 12",
+    status: "draft"
   },
   {
     key: "2",
-    expense: "Transportation - Moving from x to y",
-    project: "Evenhour project",
-    member: "Umesh Subedi",
-    date: "May 1",
-    amount: 2000
-  },
-  {
-    key: "3",
-    expense: "Services - Website Maintainence",
-    project: "Time Management App",
-    member: "Madan Poudel",
-    date: "April 12",
-    amount: 16000
-  }
-];
-
-const pieChartColumns = [
-  {
-    title: "category",
-    dataIndex: "category"
-  },
-  {
-    title: "Amount",
-    dataIndex: "amount"
-  },
-  {
-    title: "Percentage",
-    dataIndex: "percentage"
-  }
-];
-const pieChartData = [
-  {
-    key: "1",
-    category: "Entertainment ",
-    amount: 23000,
-    percentage: `33%`
-  },
-  {
-    key: "1",
-    category: "Transportation ",
-    amount: 18000,
-    percentage: `25%`
-  },
-  {
-    key: "1",
-    category: "Infrastructure ",
-    amount: 18000,
-    percentage: `25%`
-  },
-  {
-    key: "1",
-    category: "Others ",
-    amount: 12000,
-    percentage: `17%`
+    client: "Brian Van Rooyen",
+    period: "May 12 to Sep 12",
+    duration: "45h 12m",
+    amount: 12300,
+    issueDate: "Sep 12",
+    status: "paid"
   }
 ];
 
@@ -112,7 +69,7 @@ const rowSelection = {
   hideDefaultSelections: true
 };
 
-class Expenses extends Component {
+class Invoices extends Component {
   state = {
     modal1Visible: false,
     selectedRowKeys: [],
@@ -150,30 +107,20 @@ class Expenses extends Component {
         <Card
           title={
             <StyledCardTitle>
-              <h1>Expenses</h1>
+              <h1>Invoices</h1>
               <Button
                 type="primary"
                 icon="plus"
                 size="large"
                 onClick={() => this.setModal1Visible(true)}
               >
-                Add Expense
+                Create Invoice
               </Button>
             </StyledCardTitle>
           }
         >
           <Row>
-            <Col sm={12}>
-              <ExpenseChart />
-            </Col>
-            <Col sm={12}>
-              <Table
-                columns={pieChartColumns}
-                dataSource={pieChartData}
-                pagination={false}
-                size="small"
-              />
-            </Col>
+            <InvoiceChart />
           </Row>
           <div
             style={{
@@ -202,13 +149,13 @@ class Expenses extends Component {
         </Card>
 
         <Modal
-          title="Add a new Expense"
+          title="Create Invoice"
           style={{ top: 20 }}
           visible={this.state.modal1Visible}
           onOk={() => this.setModal1Visible(false)}
           onCancel={() => this.setModal1Visible(false)}
         >
-          <AddExpense />
+          <CreateInvoice />
         </Modal>
       </div>
     );
@@ -225,4 +172,4 @@ const StyledCardTitle = styled.div`
   }
 `;
 
-export default Expenses;
+export default Invoices;
