@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { Table, Divider, Dropdown, Button, Menu } from "antd";
+import { Table, Divider, Dropdown, Button, Menu, Card, Modal } from "antd";
 import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+import AddProject from "./addProject";
+
 const menu = (
   <Menu>
     <Menu.Item>Archive</Menu.Item>
@@ -48,15 +51,21 @@ const data = [
 class Projects extends Component {
   state = {
     selectedRowKeys: [],
-    loading: false
+    loading: false,
+    modal1Visible: false
   };
+
+  setModal1Visible(modal1Visible: any) {
+    this.setState({ modal1Visible });
+  }
 
   start = () => {
     this.setState({ loading: true });
     setTimeout(() => {
       this.setState({
         selectedRowKeys: [],
-        loading: false
+        loading: false,
+        modal1Visible: false
       });
     }, 1000);
   };
@@ -73,35 +82,62 @@ class Projects extends Component {
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-      <div
-        className="list"
-        style={{
-          margin: "24px 48px",
-          backgroundColor: "#fff",
-          padding: "48px 16px",
-          borderRadius: 8
-        }}
-      >
-        <Dropdown
-          overlay={menu}
-          placement="bottomCenter"
-          disabled={!hasSelected}
+      <div>
+        <Card
+          title={
+            <StyledCardTitle>
+              <h1>Projects</h1>
+              <Button
+                type="primary"
+                icon="plus"
+                size="large"
+                onClick={() => this.setModal1Visible(true)}
+              >
+                Create Project
+              </Button>
+            </StyledCardTitle>
+          }
         >
-          <Button type="dashed" loading={loading}>
-            Bulk Actions
-          </Button>
-        </Dropdown>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={data}
-        />
+          <Dropdown
+            overlay={menu}
+            placement="bottomCenter"
+            disabled={!hasSelected}
+          >
+            <Button type="dashed" loading={loading}>
+              Bulk Actions
+            </Button>
+          </Dropdown>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+          </span>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={data}
+          />
+        </Card>
+        <Modal
+          title="Create Invoice"
+          style={{ top: 20 }}
+          visible={this.state.modal1Visible}
+          onOk={() => this.setModal1Visible(false)}
+          onCancel={() => this.setModal1Visible(false)}
+        >
+          <AddProject />
+        </Modal>
       </div>
     );
   }
 }
+
+const StyledCardTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    padding: 8px 0;
+  }
+`;
 
 export default Projects;

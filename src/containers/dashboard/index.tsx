@@ -58,32 +58,32 @@ class Dashboard extends Component {
             </Menu.Item>
             <Menu.Item key="3">
               <NavLink to="/projects">
-                <Icon type="file" />
+                <Icon type="check-square" />
                 <span className="nav-text">Projects</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="5">
               <NavLink to="/clients">
-                <Icon type="file" />
+                <Icon type="usergroup-add" />
                 <span className="nav-text">Clients</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="7">
               <NavLink to="/reports">
-                <Icon type="file" />
+                <Icon type="snippets" />
                 <span className="nav-text">Reports</span>
               </NavLink>
             </Menu.Item>
 
             <Menu.Item key="8">
               <NavLink to="/expenses">
-                <Icon type="file" />
+                <Icon type="pie-chart" />
                 <span className="nav-text">Expenses</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="9">
               <NavLink to="/invoices">
-                <Icon type="file" />
+                <Icon type="area-chart" />
                 <span className="nav-text">Invoices</span>
               </NavLink>
             </Menu.Item>
