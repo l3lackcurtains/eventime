@@ -102,10 +102,7 @@ const SingleProject = (props: any) => {
     <>
       <h1>Projects</h1>
       <ProjectWrapper>
-        <DragDropContext
-          onDragEnd={res => onDragCardEnd(res)}
-          onDragStart={onDragStart}
-        >
+        <DragDropContext onDragEnd={res => onDragCardEnd(res)}>
           {projectTasks.map((tasks, index) => (
             <ProjectArea>
               <TaskDropdown
