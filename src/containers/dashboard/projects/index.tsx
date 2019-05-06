@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Table, Divider, Dropdown, Button, Menu, Card, Modal } from "antd";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+
 import AddProject from "./addProject";
 
 const menu = (
@@ -20,7 +21,7 @@ const columns = [
         .toLowerCase()
         .split(" ")
         .join("-");
-      return <NavLink to={`/project/${projectUrl}`}>{text}</NavLink>;
+      return <NavLink to={`/projects/${projectUrl}`}>{text}</NavLink>;
     }
   },
   {
@@ -36,6 +37,7 @@ const columns = [
     )
   }
 ];
+
 const data = [
   {
     key: "1",
@@ -48,87 +50,84 @@ const data = [
     actions: <p>hb</p>
   }
 ];
-class Projects extends Component {
-  state = {
-    selectedRowKeys: [],
-    loading: false,
-    modal1Visible: false
+
+const Projects = () => {
+  /**
+   * Table Rows Selection
+   */
+  const [selectedRowKeys, setSelectedRowKey] = useState([]);
+
+  const onTableRowSelection = (selKeys: any) => {
+    setSelectedRowKey(selKeys);
   };
 
-  setModal1Visible(modal1Visible: any) {
-    this.setState({ modal1Visible });
-  }
-
-  start = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false,
-        modal1Visible: false
-      });
-    }, 1000);
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onTableRowSelection
   };
 
-  onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  const hasSelected = selectedRowKeys.length > 0;
+
+  /**
+   * Create Project Modal
+   */
+
+  const [createProjectModalVisible, setCreateProjectModalVisible] = useState(
+    false
+  );
+
+  const onChangeProjectModalState = (state: boolean) => {
+    setCreateProjectModalVisible(state);
   };
-  render() {
-    const { loading, selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange
-    };
-    const hasSelected = selectedRowKeys.length > 0;
-    return (
-      <div>
-        <Card
-          title={
+
+  return (
+    <div>
+      <Card
+        title={
+          <>
             <StyledCardTitle>
               <h1>Projects</h1>
               <Button
                 type="primary"
                 icon="plus"
                 size="large"
-                onClick={() => this.setModal1Visible(true)}
+                onClick={() => onChangeProjectModalState(true)}
               >
                 Create Project
               </Button>
             </StyledCardTitle>
-          }
-        >
+          </>
+        }
+      >
+        <StyledAboveTable>
           <Dropdown
             overlay={menu}
             placement="bottomCenter"
             disabled={!hasSelected}
           >
-            <Button type="dashed" loading={loading}>
-              Bulk Actions
-            </Button>
+            <Button type="dashed">Bulk Actions</Button>
           </Dropdown>
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
           </span>
-          <Table
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={data}
-          />
-        </Card>
-        <Modal
-          title="Create Invoice"
-          style={{ top: 20 }}
-          visible={this.state.modal1Visible}
-          onOk={() => this.setModal1Visible(false)}
-          onCancel={() => this.setModal1Visible(false)}
-        >
-          <AddProject />
-        </Modal>
-      </div>
-    );
-  }
-}
+        </StyledAboveTable>
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={data}
+        />
+      </Card>
+      <Modal
+        title="Create Project"
+        visible={createProjectModalVisible}
+        onOk={() => onChangeProjectModalState(false)}
+        onCancel={() => onChangeProjectModalState(false)}
+      >
+        <AddProject />
+      </Modal>
+    </div>
+  );
+};
 
 const StyledCardTitle = styled.div`
   display: flex;
@@ -138,6 +137,10 @@ const StyledCardTitle = styled.div`
   h1 {
     padding: 8px 0;
   }
+`;
+
+const StyledAboveTable = styled.div`
+  margin: 24px 0;
 `;
 
 export default Projects;

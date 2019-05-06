@@ -1,11 +1,8 @@
-import React, { Component } from "react";
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
-import {
-  Route,
-  Switch,
-  NavLink,
-  BrowserRouter as Router
-} from "react-router-dom";
+import React, { useState } from "react";
+import { Layout, Drawer, Button } from "antd";
+import { Route, Switch } from "react-router-dom";
+import styled from "styled-components";
+
 import Timer from "./timer";
 import Dash from "./dash";
 import Projects from "./projects";
@@ -14,104 +11,116 @@ import Reports from "./reports";
 import SingleProject from "./projects/singleProject";
 import Expenses from "./expenses";
 import Invoices from "./invoices";
-
+import DashSideBar from "../../components/dashSideBar";
+import DashHeader from "../../components/dashHeader";
 const { Header, Content, Footer, Sider } = Layout;
 
-class Dashboard extends Component {
-  state = {
-    collapsed: false
+const Dashboard = (props: any) => {
+  // Slider Collapse
+  const [collapsed, setCollapsed] = useState(false);
+  const onCollapse = (collapsed: boolean) => {
+    setCollapsed(collapsed);
   };
 
-  onCollapse = (collapsed: any) => {
-    this.setState({ collapsed });
+  // Drawer Open and Close
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const onDrawerClose = () => {
+    setDrawerVisible(false);
+  };
+  const onDrawerOpen = () => {
+    setDrawerVisible(true);
   };
 
-  render() {
-    return (
-      <Layout style={{ minHeight: "100vh" }}>
-        <Sider
-          collapsible
-          collapsed={this.state.collapsed}
-          onCollapse={this.onCollapse}
-          style={{ background: "#fff" }}
-          width={250}
-        >
-          <div className="logo" style={{ height: 60 }}>
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      <StyledSider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={onCollapse}
+        style={{ background: "#fff" }}
+        width={250}
+      >
+        <div className="logo" style={{ height: 60, padding: 32 }}>
+          LOGO
+        </div>
+        <DashSideBar />
+      </StyledSider>
+      <Drawer
+        title={
+          <div className="logo" style={{ height: 60, padding: 32 }}>
             LOGO
           </div>
-          <Menu
-            defaultSelectedKeys={["1"]}
-            mode="inline"
-            style={{ height: "100%", borderRight: 0 }}
-          >
-            <Menu.Item key="1">
-              <NavLink to="/">
-                <Icon type="pie-chart" />
-                <span className="nav-text">Dashboard</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <NavLink to="/timer">
-                <Icon type="desktop" />
-                <span className="nav-text">Time</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <NavLink to="/projects">
-                <Icon type="check-square" />
-                <span className="nav-text">Projects</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <NavLink to="/clients">
-                <Icon type="usergroup-add" />
-                <span className="nav-text">Clients</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="7">
-              <NavLink to="/reports">
-                <Icon type="snippets" />
-                <span className="nav-text">Reports</span>
-              </NavLink>
-            </Menu.Item>
-
-            <Menu.Item key="8">
-              <NavLink to="/expenses">
-                <Icon type="pie-chart" />
-                <span className="nav-text">Expenses</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="9">
-              <NavLink to="/invoices">
-                <Icon type="area-chart" />
-                <span className="nav-text">Invoices</span>
-              </NavLink>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header style={{ background: "#fff", padding: 0 }} />
-          <Content
-            style={{ margin: "0 16px", padding: "36px 48px", minHeight: 360 }}
-          >
-            <Switch>
-              <Route path="/" exact component={Dash} />
-              <Route path="/timer" component={Timer} />
-              <Route path="/projects" component={Projects} />
-              <Route path="/project/:project" component={SingleProject} />
-              <Route path="/clients" component={Clients} />
-              <Route path="/reports" component={Reports} />
-              <Route path="/expenses" component={Expenses} />
-              <Route path="/invoices" component={Invoices} />
-            </Switch>
-          </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2018 Created by Ant UED
-          </Footer>
-        </Layout>
+        }
+        placement="left"
+        onClose={onDrawerClose}
+        visible={drawerVisible}
+      >
+        <DashSideBar />
+      </Drawer>
+      <Layout>
+        <StyledHeader>
+          <DrawerOpenerButton onClick={onDrawerOpen} icon="menu" size="large" />
+          <DashHeader />
+        </StyledHeader>
+        <StyledContent>
+          <Switch>
+            <Route path="/" exact component={Dash} />
+            <Route path="/timer" component={Timer} />
+            <Route path="/projects" exact component={Projects} />
+            <Route path="/projects/:project" component={SingleProject} />
+            <Route path="/clients" component={Clients} />
+            <Route path="/reports" component={Reports} />
+            <Route path="/expenses" component={Expenses} />
+            <Route path="/invoices" component={Invoices} />
+          </Switch>
+        </StyledContent>
+        <StyledFooter>EvenTime - 2019</StyledFooter>
       </Layout>
-    );
+    </Layout>
+  );
+};
+
+const StyledSider = styled(Sider)`
+  background: #fff;
+  .logo {
+    height: 60px;
+    padding: 32px;
   }
-}
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+const DrawerOpenerButton = styled(Button)`
+  @media (min-width: 768px) {
+    display: none;
+  }
+  margin: 16px;
+`;
+
+const StyledHeader = styled(Header)`
+  background: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e3e3e3;
+`;
+
+const StyledContent = styled(Content)`
+  margin: 0 16px;
+  padding: 36px;
+  min-height: 450;
+
+  @media (max-width: 767px) {
+    margin: 36px 8px;
+    padding: 6px 8px;
+  }
+`;
+
+const StyledFooter = styled(Footer)`
+  text-align: center;
+`;
 
 export default Dashboard;

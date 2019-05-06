@@ -1,44 +1,71 @@
-import React, { Component } from "react";
-import { Tabs, Radio } from "antd";
+import React, { Component, useState } from "react";
+import { Tabs, Radio, Card } from "antd";
 import { Switch, Route, Link, Redirect } from "react-router-dom";
 import Summary from "./summary";
 import Detailed from "./detailed";
 import Timesheet from "./timesheet";
 import Filters from "./filters";
+import styled from "styled-components";
 const TabPane = Tabs.TabPane;
 
-class Reports extends Component {
-  state = {
-    type: "summary"
-  };
-  handleSizeChange = (e: any) => {
-    this.setState({ type: e.target.value });
+const Reports = (props: any) => {
+  /**
+   * Report Type
+   */
+  let currentReportType = "summary";
+  const currentPath = props.history.location.pathname;
+  if (currentPath.includes("detailed")) {
+    currentReportType = "detailed";
+  }
+  if (currentPath.includes("timesheet")) {
+    currentReportType = "timesheet";
+  }
+  const [reportType, setReportType] = useState(currentReportType);
+  const onReportTypeChange = (e: any) => {
     let path = e.target.value;
+    setReportType(path);
     if (path === "summary") {
       path = "";
     }
     // @ts-ignore
-    this.props.history.push(`/reports/${path}`);
+    props.history.push(`/reports/${path}`);
   };
 
-  render() {
-    return (
-      <div>
-        <h1>Reports</h1>
-        <Radio.Group value={this.state.type} onChange={this.handleSizeChange}>
-          <Radio.Button value="summary">Summary</Radio.Button>
-          <Radio.Button value="detailed">Detailed</Radio.Button>
-          <Radio.Button value="timesheet">Timesheet</Radio.Button>
-        </Radio.Group>
-        <Filters />
+  return (
+    <>
+      <Card
+        title={
+          <>
+            <StyledCardTitle>
+              <h1>Reports</h1>
+            </StyledCardTitle>
+            <Radio.Group value={reportType} onChange={onReportTypeChange}>
+              <Radio.Button value="summary">Summary</Radio.Button>
+              <Radio.Button value="detailed">Detailed</Radio.Button>
+              <Radio.Button value="timesheet">Timesheet</Radio.Button>
+            </Radio.Group>
+            <Filters />
+          </>
+        }
+      >
         <Switch>
           <Route path={`/reports`} exact component={Summary} />
           <Route path={`/reports/detailed`} component={Detailed} />
           <Route path={`/reports/timesheet`} component={Timesheet} />
         </Switch>
-      </div>
-    );
+      </Card>
+    </>
+  );
+};
+
+const StyledCardTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    padding: 8px 0;
   }
-}
+`;
 
 export default Reports;

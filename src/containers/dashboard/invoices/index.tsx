@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Table, Dropdown, Button, Menu, Modal, Card, Row, Col } from "antd";
 import styled from "styled-components";
 
@@ -37,6 +37,7 @@ const columns = [
     dataIndex: "status"
   }
 ];
+
 const data = [
   {
     key: "1",
@@ -58,109 +59,93 @@ const data = [
   }
 ];
 
-const rowSelection = {
-  onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  hideDefaultSelections: true
-};
+const Invoices = () => {
+  /**
+   * Table Rows Selection
+   */
+  const [selectedRowKeys, setSelectedRowKey] = useState([]);
 
-class Invoices extends Component {
-  state = {
-    modal1Visible: false,
-    selectedRowKeys: [],
-    loading: false
+  const onTableRowSelection = (selKeys: any) => {
+    setSelectedRowKey(selKeys);
   };
 
-  setModal1Visible(modal1Visible: any) {
-    this.setState({ modal1Visible });
-  }
-
-  start = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false
-      });
-    }, 1000);
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onTableRowSelection
   };
 
-  onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  const hasSelected = selectedRowKeys.length > 0;
+
+  /**
+   * Create Invoice Modal
+   */
+
+  const [createInvoiceModalVisible, setCreateInvoiceModalVisible] = useState(
+    false
+  );
+
+  const onChangeInvoiceModalState = (state: boolean) => {
+    setCreateInvoiceModalVisible(state);
   };
 
-  render() {
-    const { loading, selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange
-    };
-    const hasSelected = selectedRowKeys.length > 0;
-    return (
-      <div>
-        <Card
-          title={
-            <StyledCardTitle>
-              <h1>Invoices</h1>
-              <Button
-                type="primary"
-                icon="plus"
-                size="large"
-                onClick={() => this.setModal1Visible(true)}
-              >
-                Create Invoice
-              </Button>
-            </StyledCardTitle>
-          }
+  return (
+    <div>
+      <Card
+        title={
+          <StyledCardTitle>
+            <h1>Invoices</h1>
+            <Button
+              type="primary"
+              icon="plus"
+              size="large"
+              onClick={() => onChangeInvoiceModalState(true)}
+            >
+              Create Invoice
+            </Button>
+          </StyledCardTitle>
+        }
+      >
+        <Row>
+          <InvoiceChart />
+        </Row>
+        <div
+          style={{
+            padding: "48px 16px",
+            borderRadius: 8
+          }}
         >
-          <Row>
-            <InvoiceChart />
-          </Row>
-          <div
-            style={{
-              padding: "48px 16px",
-              borderRadius: 8
-            }}
-          >
+          <StyledAboveTable>
             <Dropdown
               overlay={menu}
               placement="bottomCenter"
               disabled={!hasSelected}
             >
-              <Button type="dashed" loading={loading}>
-                Bulk Actions
-              </Button>
+              <Button type="dashed">Bulk Actions</Button>
             </Dropdown>
             <span style={{ marginLeft: 8 }}>
               {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
             </span>
-            <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={data}
-            />
-          </div>
-        </Card>
+          </StyledAboveTable>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={data}
+          />
+        </div>
+      </Card>
 
-        <Modal
-          title="Create Invoice"
-          style={{ top: 20 }}
-          visible={this.state.modal1Visible}
-          onOk={() => this.setModal1Visible(false)}
-          onCancel={() => this.setModal1Visible(false)}
-        >
-          <CreateInvoice />
-        </Modal>
-      </div>
-    );
-  }
-}
+      <Modal
+        title="Create Invoice"
+        style={{ top: 20 }}
+        visible={createInvoiceModalVisible}
+        onOk={() => onChangeInvoiceModalState(false)}
+        onCancel={() => onChangeInvoiceModalState(false)}
+      >
+        <CreateInvoice />
+      </Modal>
+    </div>
+  );
+};
 
 const StyledCardTitle = styled.div`
   display: flex;
@@ -170,6 +155,10 @@ const StyledCardTitle = styled.div`
   h1 {
     padding: 8px 0;
   }
+`;
+
+const StyledAboveTable = styled.div`
+  margin: 24px 0;
 `;
 
 export default Invoices;

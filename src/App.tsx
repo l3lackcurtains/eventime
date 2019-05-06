@@ -5,11 +5,7 @@ import "./App.scss";
 import MainApp from "./containers";
 
 const App: React.FC = () => {
-  return (
-    <div className="App">
-      <MainApp />
-    </div>
-  );
+  return <MainApp />;
 };
 
 export default App;

@@ -63,7 +63,7 @@ const SingleProject = (props: any) => {
    * *******************************
    */
 
-  function onDragCardEnd(result: any) {
+  const onDragCardEnd = (result: any) => {
     const { source, destination } = result;
     // dropped outside the
     if (!destination) {
@@ -96,12 +96,10 @@ const SingleProject = (props: any) => {
       });
       setProjectTasks(projectTasksData);
     }
-  }
-
-  function onDragStart() {}
+  };
 
   return (
-    <div>
+    <>
       <h1>Projects</h1>
       <ProjectWrapper>
         <DragDropContext
@@ -223,7 +221,7 @@ const SingleProject = (props: any) => {
           </ProjectArea>
         </DragDropContext>
       </ProjectWrapper>
-    </div>
+    </>
   );
 };
 

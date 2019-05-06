@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 
-import { Table, Button } from "antd";
+import { Table } from "antd";
 
 const columns = [
   {
@@ -23,21 +23,8 @@ for (let i = 0; i < 46; i++) {
   });
 }
 
-class Summary extends Component {
-  render() {
-    return (
-      <div
-        style={{
-          margin: "16px 0",
-          background: "#fff",
-          padding: 24,
-          borderRadius: 10
-        }}
-      >
-        <Table columns={columns} dataSource={data} />
-      </div>
-    );
-  }
-}
+const Summary = () => {
+  return <Table columns={columns} dataSource={data} />;
+};
 
 export default Summary;

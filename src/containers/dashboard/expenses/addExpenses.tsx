@@ -35,7 +35,6 @@ function onSelectChange(value: any) {
 
 const AddExpense = () => {
   const [fileList, setFileList] = useState([]);
-
   function handleFileChange(info: any) {
     let fileList: any = [...info.fileList];
     fileList = fileList.slice(-2);
@@ -50,7 +49,7 @@ const AddExpense = () => {
     return null;
   }
   return (
-    <div>
+    <section>
       <Form layout="vertical">
         <Form.Item label="Category">
           <Select
@@ -137,7 +136,7 @@ const AddExpense = () => {
           </Col>
         </Row>
       </Form>
-    </div>
+    </section>
   );
 };
 

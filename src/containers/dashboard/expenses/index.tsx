@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Table, Dropdown, Button, Menu, Modal, Card, Row, Col } from "antd";
 import styled from "styled-components";
 
@@ -17,7 +17,7 @@ const columns = [
     dataIndex: "expense"
   },
   {
-    title: "Project",
+    title: "Expense",
     dataIndex: "project"
   },
   {
@@ -101,119 +101,96 @@ const pieChartData = [
   }
 ];
 
-const rowSelection = {
-  onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  hideDefaultSelections: true
-};
+const Expenses = () => {
+  /**
+   * Table Rows Selection
+   */
+  const [selectedRowKeys, setSelectedRowKey] = useState([]);
 
-class Expenses extends Component {
-  state = {
-    modal1Visible: false,
-    selectedRowKeys: [],
-    loading: false
+  const onTableRowSelection = (selKeys: any) => {
+    setSelectedRowKey(selKeys);
   };
 
-  setModal1Visible(modal1Visible: any) {
-    this.setState({ modal1Visible });
-  }
-
-  start = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false
-      });
-    }, 1000);
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onTableRowSelection
   };
 
-  onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  const hasSelected = selectedRowKeys.length > 0;
+
+  /**
+   * Create Expense Modal
+   */
+
+  const [createExpenseModalVisible, setCreateExpenseModalVisible] = useState(
+    false
+  );
+
+  const onChangeExpenseModalState = (state: boolean) => {
+    setCreateExpenseModalVisible(state);
   };
 
-  render() {
-    const { loading, selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange
-    };
-    const hasSelected = selectedRowKeys.length > 0;
-    return (
-      <div>
-        <Card
-          title={
-            <StyledCardTitle>
-              <h1>Expenses</h1>
-              <Button
-                type="primary"
-                icon="plus"
-                size="large"
-                onClick={() => this.setModal1Visible(true)}
-              >
-                Add Expense
-              </Button>
-            </StyledCardTitle>
-          }
-        >
-          <Row>
-            <Col sm={12}>
-              <ExpenseChart />
-            </Col>
-            <Col sm={12}>
-              <Table
-                columns={pieChartColumns}
-                dataSource={pieChartData}
-                pagination={false}
-                size="small"
-              />
-            </Col>
-          </Row>
-          <div
-            style={{
-              padding: "48px 16px",
-              borderRadius: 8
-            }}
-          >
-            <Dropdown
-              overlay={menu}
-              placement="bottomCenter"
-              disabled={!hasSelected}
+  return (
+    <div>
+      <Card
+        title={
+          <StyledCardTitle>
+            <h1>Expenses</h1>
+            <Button
+              type="primary"
+              icon="plus"
+              size="large"
+              onClick={() => onChangeExpenseModalState(true)}
             >
-              <Button type="dashed" loading={loading}>
-                Bulk Actions
-              </Button>
-            </Dropdown>
-            <span style={{ marginLeft: 8 }}>
-              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-            </span>
+              Add Expense
+            </Button>
+          </StyledCardTitle>
+        }
+      >
+        <Row>
+          <Col sm={12}>
+            <ExpenseChart />
+          </Col>
+          <Col sm={12}>
             <Table
-              rowSelection={rowSelection}
-              columns={columns}
-              dataSource={data}
+              columns={pieChartColumns}
+              dataSource={pieChartData}
+              pagination={false}
+              size="small"
             />
-          </div>
-        </Card>
+          </Col>
+        </Row>
+        <StyledAboveTable>
+          <Dropdown
+            overlay={menu}
+            placement="bottomCenter"
+            disabled={!hasSelected}
+          >
+            <Button type="dashed">Bulk Actions</Button>
+          </Dropdown>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+          </span>
+        </StyledAboveTable>
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={data}
+        />
+      </Card>
 
-        <Modal
-          title="Add a new Expense"
-          style={{ top: 20 }}
-          visible={this.state.modal1Visible}
-          onOk={() => this.setModal1Visible(false)}
-          onCancel={() => this.setModal1Visible(false)}
-        >
-          <AddExpense />
-        </Modal>
-      </div>
-    );
-  }
-}
+      <Modal
+        title="Add a new Expense"
+        style={{ top: 20 }}
+        visible={createExpenseModalVisible}
+        onOk={() => onChangeExpenseModalState(false)}
+        onCancel={() => onChangeExpenseModalState(false)}
+      >
+        <AddExpense />
+      </Modal>
+    </div>
+  );
+};
 
 const StyledCardTitle = styled.div`
   display: flex;
@@ -223,6 +200,10 @@ const StyledCardTitle = styled.div`
   h1 {
     padding: 8px 0;
   }
+`;
+
+const StyledAboveTable = styled.div`
+  margin: 24px 0;
 `;
 
 export default Expenses;

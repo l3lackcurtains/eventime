@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-import { Table, Dropdown, Button, Menu, Modal } from "antd";
+import React, { useState } from "react";
+import { Table, Dropdown, Button, Menu, Modal, Card } from "antd";
 import AddClient from "./addClient";
+import styled from "styled-components";
 
 const menu = (
   <Menu>
@@ -29,6 +30,7 @@ const columns = [
     )
   }
 ];
+
 const data = [
   {
     key: "1",
@@ -42,101 +44,99 @@ const data = [
   }
 ];
 
-// rowSelection object indicates the need for row selection
-const rowSelection = {
-  onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  hideDefaultSelections: true
-};
+const Clients = () => {
+  /**
+   * Table Rows Selection
+   */
+  const [selectedRowKeys, setSelectedRowKey] = useState([]);
 
-class Clients extends Component {
-  state = {
-    modal1Visible: false,
-    selectedRowKeys: [],
-    loading: false
+  const onTableRowSelection = (selKeys: any) => {
+    setSelectedRowKey(selKeys);
   };
 
-  setModal1Visible(modal1Visible: any) {
-    this.setState({ modal1Visible });
-  }
-
-  start = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false
-      });
-    }, 1000);
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onTableRowSelection
   };
 
-  onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  const hasSelected = selectedRowKeys.length > 0;
+
+  /**
+   * Create Client Modal
+   */
+
+  const [createClientModalVisible, setCreateClientModalVisible] = useState(
+    false
+  );
+
+  const onChangeClientModalState = (state: boolean) => {
+    setCreateClientModalVisible(state);
   };
 
-  render() {
-    const { loading, selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange
-    };
-    const hasSelected = selectedRowKeys.length > 0;
-    return (
-      <div>
-        <Button
-          type="primary"
-          icon="plus"
-          onClick={() => this.setModal1Visible(true)}
-        >
-          Add Client
-        </Button>
-
-        <div
-          className="list"
-          style={{
-            margin: "24px 48px",
-            backgroundColor: "#fff",
-            padding: "48px 16px",
-            borderRadius: 8
-          }}
-        >
+  return (
+    <div>
+      <Card
+        title={
+          <>
+            <StyledCardTitle>
+              <h1>Clients</h1>
+              <Button
+                type="primary"
+                icon="plus"
+                size="large"
+                onClick={() => onChangeClientModalState(true)}
+              >
+                Add Client
+              </Button>
+            </StyledCardTitle>
+          </>
+        }
+      >
+        <StyledAboveTable>
           <Dropdown
             overlay={menu}
             placement="bottomCenter"
             disabled={!hasSelected}
           >
-            <Button type="dashed" loading={loading}>
-              Bulk Actions
-            </Button>
+            <Button type="dashed">Bulk Actions</Button>
           </Dropdown>
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
           </span>
-          <Table
-            rowSelection={rowSelection}
-            columns={columns}
-            dataSource={data}
-          />
-        </div>
-        <Modal
-          title="Add a new Client"
-          style={{ top: 20 }}
-          visible={this.state.modal1Visible}
-          onOk={() => this.setModal1Visible(false)}
-          onCancel={() => this.setModal1Visible(false)}
-          width={750}
-        >
-          <AddClient />
-        </Modal>
-      </div>
-    );
+        </StyledAboveTable>
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={data}
+        />
+      </Card>
+      <Modal
+        title="Add a new Client"
+        style={{ top: 20 }}
+        visible={createClientModalVisible}
+        onOk={() => onChangeClientModalState(false)}
+        onCancel={() => onChangeClientModalState(false)}
+        width={750}
+      >
+        <AddClient />
+      </Modal>
+    </div>
+  );
+};
+
+// TODO: Need to make it reusable
+const StyledCardTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    padding: 8px 0;
   }
-}
+`;
+
+const StyledAboveTable = styled.div`
+  margin: 24px 0;
+`;
 
 export default Clients;

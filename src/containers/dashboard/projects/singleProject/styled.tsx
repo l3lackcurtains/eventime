@@ -28,14 +28,14 @@ export const ProjectWrapper = styled.section`
 
 export const ProjectArea = styled.div`
   padding: 8px;
-  margin: 0 16px;
+  margin-right: 16px;
   background: #fcfcfc;
   width: 300px;
 `;
 
 export const ProjectCard = styled(Card)`
   margin-bottom: 16px;
-  border-left: 4px solid #000;
+  border-left: 5px solid #000;
   .ant-card-body {
     padding: 16px 16px 4px 24px;
   }
