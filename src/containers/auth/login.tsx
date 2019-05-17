@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import styled from "styled-components";
 import { CustomTextInput } from "../../components/fields/formFields";
 import { Formik } from "formik";
+import { useMutation } from "react-apollo-hooks";
+import LOGIN from "../../graphql/auth/login";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -15,17 +17,28 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = (props: any) => {
+  const doLogin = useMutation(LOGIN);
+
   return (
     <Wrapper>
       <AuthForm>
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={LoginSchema}
-          onSubmit={(values, actions) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              actions.setSubmitting(false);
-            }, 1000);
+          onSubmit={async values => {
+            const { email, password } = values;
+            const result = await doLogin({
+              variables: {
+                email,
+                password
+              }
+            });
+            console.log(result);
+            if (result.data.login.success) {
+              console.log("Logged In!");
+            } else {
+              console.log(result.data.login.message);
+            }
           }}
           render={(props: any) => (
             <Form onSubmit={props.handleSubmit}>
