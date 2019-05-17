@@ -13,6 +13,8 @@ import Expenses from "./expenses";
 import Invoices from "./invoices";
 import DashSideBar from "../../components/dashSideBar";
 import DashHeader from "../../components/dashHeader";
+import Login from "../auth";
+import Auth from "../auth";
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = (props: any) => {
@@ -30,6 +32,11 @@ const Dashboard = (props: any) => {
   const onDrawerOpen = () => {
     setDrawerVisible(true);
   };
+  const notLoggedIn = true;
+
+  if (notLoggedIn) {
+    return <Auth />;
+  }
 
   return (
     <Layout style={{ minHeight: "100vh" }}>

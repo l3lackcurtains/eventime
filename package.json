@@ -11,9 +11,11 @@
     "@types/react-router-dom": "^4.3.2",
     "@types/recharts": "^1.1.16",
     "@types/styled-components": "^4.1.14",
+    "@types/yup": "^0.26.13",
     "antd": "^3.16.6",
     "babel-plugin-import": "^1.11.0",
     "customize-cra": "^0.2.12",
+    "formik": "^2.0.1-alpha.5",
     "history": "^4.9.0",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
@@ -28,7 +30,8 @@
     "recharts": "^1.5.0",
     "sass-loader": "^7.1.0",
     "styled-components": "^4.2.0",
-    "typescript": "3.4.5"
+    "typescript": "3.4.5",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
