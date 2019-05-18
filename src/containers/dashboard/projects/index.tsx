@@ -1,8 +1,7 @@
+import { Button, Card, Divider, Dropdown, Menu, Modal, Table } from "antd";
 import React, { useState } from "react";
-import { Table, Divider, Dropdown, Button, Menu, Card, Modal } from "antd";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
 import AddProject from "./addProject";
 
 const menu = (
@@ -21,7 +20,7 @@ const columns = [
         .toLowerCase()
         .split(" ")
         .join("-");
-      return <NavLink to={`/projects/${projectUrl}`}>{text}</NavLink>;
+      return <NavLink to={`/dashboard/projects/${projectUrl}`}>{text}</NavLink>;
     }
   },
   {

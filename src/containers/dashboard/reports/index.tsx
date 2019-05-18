@@ -1,12 +1,11 @@
-import React, { Component, useState } from "react";
-import { Tabs, Radio, Card } from "antd";
-import { Switch, Route, Link, Redirect } from "react-router-dom";
-import Summary from "./summary";
-import Detailed from "./detailed";
-import Timesheet from "./timesheet";
-import Filters from "./filters";
+import { Card, Radio } from "antd";
+import React, { useState } from "react";
+import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-const TabPane = Tabs.TabPane;
+import Detailed from "./detailed";
+import Filters from "./filters";
+import Summary from "./summary";
+import Timesheet from "./timesheet";
 
 const Reports = (props: any) => {
   /**

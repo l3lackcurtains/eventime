@@ -1,8 +1,7 @@
-import "antd/dist/antd.css";
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 import React from "react";
 import { ApolloProvider } from "react-apollo-hooks";
-import "./App.scss";
+import "./App.css";
 import MainApp from "./containers";
 
 const client = new ApolloClient({
