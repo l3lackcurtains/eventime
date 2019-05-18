@@ -1,20 +1,19 @@
+import { Button, Drawer, Layout } from "antd";
 import React, { useState } from "react";
-import { Layout, Drawer, Button } from "antd";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import styled from "styled-components";
-
-import Timer from "./timer";
-import Dash from "./dash";
-import Projects from "./projects";
+import DashHeader from "../../components/dashHeader";
+import DashSideBar from "../../components/dashSideBar";
+import ProtectedRoute from "../../utils/components";
 import Clients from "./clients";
-import Reports from "./reports";
-import SingleProject from "./projects/singleProject";
+import Dash from "./dash";
 import Expenses from "./expenses";
 import Invoices from "./invoices";
-import DashSideBar from "../../components/dashSideBar";
-import DashHeader from "../../components/dashHeader";
-import Login from "../auth";
-import Auth from "../auth";
+import Projects from "./projects";
+import SingleProject from "./projects/singleProject";
+import Reports from "./reports";
+import Timer from "./timer";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = (props: any) => {
@@ -33,10 +32,6 @@ const Dashboard = (props: any) => {
     setDrawerVisible(true);
   };
   const notLoggedIn = true;
-
-  if (notLoggedIn) {
-    return <Auth />;
-  }
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -67,18 +62,25 @@ const Dashboard = (props: any) => {
       <Layout>
         <StyledHeader>
           <DrawerOpenerButton onClick={onDrawerOpen} icon="menu" size="large" />
-          <DashHeader />
+          <DashHeader history={props.history} />
         </StyledHeader>
         <StyledContent>
           <Switch>
-            <Route path="/" exact component={Dash} />
-            <Route path="/timer" component={Timer} />
-            <Route path="/projects" exact component={Projects} />
-            <Route path="/projects/:project" component={SingleProject} />
-            <Route path="/clients" component={Clients} />
-            <Route path="/reports" component={Reports} />
-            <Route path="/expenses" component={Expenses} />
-            <Route path="/invoices" component={Invoices} />
+            <ProtectedRoute exact path="/dashboard" component={Dash} />
+            <ProtectedRoute path="/dashboard/timer" component={Timer} />
+            <ProtectedRoute
+              path="/dashboard/projects"
+              exact
+              component={Projects}
+            />
+            <ProtectedRoute
+              path="/dashboard/projects/:project"
+              component={SingleProject}
+            />
+            <ProtectedRoute path="/dashboard/clients" component={Clients} />
+            <ProtectedRoute path="/dashboard/reports" component={Reports} />
+            <ProtectedRoute path="/dashboard/expenses" component={Expenses} />
+            <ProtectedRoute path="/dashboard/invoices" component={Invoices} />
           </Switch>
         </StyledContent>
         <StyledFooter>EvenTime - 2019</StyledFooter>

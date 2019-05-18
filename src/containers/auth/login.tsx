@@ -1,10 +1,10 @@
-import React from "react";
-import { Icon, Button, Form } from "antd";
-import * as Yup from "yup";
-import styled from "styled-components";
-import { CustomTextInput } from "../../components/fields/formFields";
+import { Button, Form, Icon } from "antd";
 import { Formik } from "formik";
+import React from "react";
 import { useMutation } from "react-apollo-hooks";
+import styled from "styled-components";
+import * as Yup from "yup";
+import { CustomTextInput } from "../../components/fields/formFields";
 import LOGIN from "../../graphql/auth/login";
 
 const LoginSchema = Yup.object().shape({
@@ -33,11 +33,8 @@ const Login = (props: any) => {
                 password
               }
             });
-            console.log(result);
             if (result.data.login.success) {
-              console.log("Logged In!");
-            } else {
-              console.log(result.data.login.message);
+              props.history.push("/dashboard");
             }
           }}
           render={(props: any) => (

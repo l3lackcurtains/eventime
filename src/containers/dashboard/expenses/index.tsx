@@ -1,7 +1,6 @@
+import { Button, Card, Col, Dropdown, Menu, Modal, Row, Table } from "antd";
 import React, { useState } from "react";
-import { Table, Dropdown, Button, Menu, Modal, Card, Row, Col } from "antd";
 import styled from "styled-components";
-
 import AddExpense from "./addExpenses";
 import ExpenseChart from "./expenseChart";
 

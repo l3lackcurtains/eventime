@@ -1,48 +1,48 @@
+import { Icon, Menu } from "antd";
 import React from "react";
-import { Menu, Icon } from "antd";
 import { NavLink } from "react-router-dom";
 
 const menuItems = [
   {
     key: 1,
     name: "Dashboard",
-    path: "/",
+    path: "/dashboard",
     icon: "pie-chart"
   },
   {
     key: 2,
     name: "Timer",
-    path: "/timer",
+    path: "/dashboard/timer",
     icon: "desktop"
   },
   {
     key: 3,
     name: "Projects",
-    path: "/projects",
+    path: "/dashboard/projects",
     icon: "check-square"
   },
   {
     key: 4,
     name: "Clients",
-    path: "/clients",
+    path: "/dashboard/clients",
     icon: "usergroup-add"
   },
   {
     key: 5,
     name: "Reports",
-    path: "/reports",
+    path: "/dashboard/reports",
     icon: "snippets"
   },
   {
     key: 6,
     name: "Expenses",
-    path: "/expenses",
+    path: "/dashboard/expenses",
     icon: "pie-chart"
   },
   {
     key: 7,
     name: "Invoices",
-    path: "/invoices",
+    path: "/dashboard/invoices",
     icon: "area-chart"
   }
 ];

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
 import {
-  Form,
-  Input,
-  Select,
-  Row,
+  Button,
   Col,
   DatePicker,
-  Upload,
-  Button,
-  Icon
+  Form,
+  Icon,
+  Input,
+  Row,
+  Select,
+  Upload
 } from "antd";
+import React, { useState } from "react";
 
 const { TextArea } = Input;
 const { Option } = Select;

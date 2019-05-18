@@ -1,14 +1,14 @@
-import React from "react";
 import "antd/dist/antd.css";
-
-import ApolloClient from "apollo-boost";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
+import React from "react";
 import { ApolloProvider } from "react-apollo-hooks";
-
 import "./App.scss";
 import MainApp from "./containers";
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000"
+  uri: "http://localhost:8000/graphql",
+  credentials: "include",
+  cache: new InMemoryCache()
 });
 
 const App: React.FC = () => {
