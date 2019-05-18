@@ -1,7 +1,7 @@
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 import React from "react";
 import { ApolloProvider } from "react-apollo-hooks";
-import "./App.css";
+import "./App.less";
 import MainApp from "./containers";
 
 const client = new ApolloClient({
