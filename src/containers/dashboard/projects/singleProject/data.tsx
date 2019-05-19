@@ -1,4 +1,4 @@
-export const projectData = {
+const projData = {
   id: "0",
   name: "project 12-1",
   sections: [
@@ -48,3 +48,5 @@ export const projectData = {
     }
   ]
 };
+
+export default projData;
