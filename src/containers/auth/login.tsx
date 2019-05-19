@@ -5,7 +5,7 @@ import { useMutation } from "react-apollo-hooks";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { CustomTextInput } from "../../components/fields/formFields";
-import LOGIN from "../../graphql/auth/login";
+import LOGIN from "../../graphql/user/login";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()

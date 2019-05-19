@@ -1,7 +1,9 @@
 import { Button, Card, Divider, Dropdown, Menu, Modal, Table } from "antd";
 import React, { useState } from "react";
+import { useQuery } from "react-apollo-hooks";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import GET_PROJECTS from "../../../graphql/project/getProjects";
 import AddProject from "./addProject";
 
 const menu = (
@@ -15,12 +17,8 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
-    render: (text: string) => {
-      const projectUrl = text
-        .toLowerCase()
-        .split(" ")
-        .join("-");
-      return <NavLink to={`/dashboard/projects/${projectUrl}`}>{text}</NavLink>;
+    render: (text: string, data: any) => {
+      return <NavLink to={`/dashboard/projects/${data.slug}`}>{text}</NavLink>;
     }
   },
   {
@@ -28,29 +26,26 @@ const columns = [
     dataIndex: "actions",
     width: 200,
     render: (text: string, record: any) => (
-      <span>
-        <a href="#">Edit</a>
+      <div>
+        <Button>Edit</Button>
         <Divider type="vertical" />
-        <a href="#">Delete</a>
-      </span>
+        <Button>Delete</Button>
+      </div>
     )
   }
 ];
 
-const data = [
-  {
-    key: "1",
-    name: "Time Management Application",
-    actions: "New York No. 1 Lake Park"
-  },
-  {
-    key: "2",
-    name: "NNTask Application Development",
-    actions: <p>hb</p>
-  }
-];
-
 const Projects = () => {
+  const { data, error, loading } = useQuery(GET_PROJECTS);
+
+  let projects = [];
+  if (!loading) {
+    projects = data.getProjects.results.map((p: any) => {
+      p.key = p.id;
+      return p;
+    });
+  }
+
   /**
    * Table Rows Selection
    */
@@ -78,6 +73,9 @@ const Projects = () => {
   const onChangeProjectModalState = (state: boolean) => {
     setCreateProjectModalVisible(state);
   };
+
+  if (loading && !!error) return null;
+  // TODO: Show starting point to create project, if no projects exist
 
   return (
     <div>
@@ -113,7 +111,7 @@ const Projects = () => {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={projects}
         />
       </Card>
       <Modal

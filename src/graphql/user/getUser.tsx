@@ -4,7 +4,7 @@ const GET_USER = gql`
   {
     getUser {
       success
-      data {
+      result {
         id
       }
     }

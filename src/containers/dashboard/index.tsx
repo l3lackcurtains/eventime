@@ -31,7 +31,6 @@ const Dashboard = (props: any) => {
   const onDrawerOpen = () => {
     setDrawerVisible(true);
   };
-  const notLoggedIn = true;
 
   return (
     <Layout style={{ minHeight: "100vh" }}>

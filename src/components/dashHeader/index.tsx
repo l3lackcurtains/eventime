@@ -1,13 +1,14 @@
+import Button from "antd/lib/button/button";
 import React from "react";
 import { useMutation } from "react-apollo-hooks";
-import LOGOUT from "../../graphql/auth/logout";
+import LOGOUT from "../../graphql/user/logout";
 
 const DashHeader = (props: any) => {
   const doLogout = useMutation(LOGOUT);
   return (
     <div>
       Dash Board Header...
-      <a
+      <Button
         onClick={async () => {
           const result = await doLogout();
           if (result && result.data && result.data.logout) {
@@ -16,7 +17,7 @@ const DashHeader = (props: any) => {
         }}
       >
         Logout
-      </a>
+      </Button>
     </div>
   );
 };

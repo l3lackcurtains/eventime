@@ -1,5 +1,5 @@
 import ApolloClient, { InMemoryCache } from "apollo-boost";
-import React from "react";
+import React, { Suspense } from "react";
 import { ApolloProvider } from "react-apollo-hooks";
 import "./App.less";
 import MainApp from "./containers";
@@ -13,7 +13,9 @@ const client = new ApolloClient({
 const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
-      <MainApp />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MainApp />
+      </Suspense>
     </ApolloProvider>
   );
 };

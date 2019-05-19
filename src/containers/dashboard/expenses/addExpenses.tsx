@@ -21,10 +21,6 @@ for (let i = 10; i < 36; i++) {
   );
 }
 
-function handleChange(value: any) {
-  console.log(`selected ${value}`);
-}
-
 function onChange(date: any, dateString: string) {
   console.log(date, dateString);
 }

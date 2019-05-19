@@ -1,18 +1,19 @@
-import React from "react";
 import {
-  Cascader,
   Button,
-  Row,
+  Card,
+  Cascader,
   Col,
   DatePicker,
-  TimePicker,
+  Icon,
   List,
-  Progress,
-  Card,
   Popover,
-  Icon
+  Progress,
+  Row,
+  TimePicker
 } from "antd";
 import moment from "moment";
+import React from "react";
+import { NavLink } from "react-router-dom";
 
 const options = [
   {
@@ -89,9 +90,9 @@ const Timer = () => {
         return (
           <span key={option.value}>
             {label} (
-            <a onClick={e => handleAreaClick(e, label, option)}>
+            <Button onClick={e => handleAreaClick(e, label, option)}>
               {option.code}
-            </a>
+            </Button>
             )
           </span>
         );
@@ -199,7 +200,7 @@ const Timer = () => {
                     </Col>
                     <Col>
                       <div>
-                        <a href="https://ant.design">{item.title}</a>
+                        <NavLink to="/">{item.title}</NavLink>
                       </div>
                       <p>
                         Ant Design, a design language for background

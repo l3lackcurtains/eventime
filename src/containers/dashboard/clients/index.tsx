@@ -1,7 +1,7 @@
+import { Button, Card, Dropdown, Menu, Modal, Table } from "antd";
 import React, { useState } from "react";
-import { Table, Dropdown, Button, Menu, Modal, Card } from "antd";
-import AddClient from "./addClient";
 import styled from "styled-components";
+import AddClient from "./addClient";
 
 const menu = (
   <Menu>
@@ -23,11 +23,7 @@ const columns = [
     title: "Actions",
     dataIndex: "actions",
     width: 200,
-    render: (text: string, record: any) => (
-      <span>
-        <a href="javascript:;">Edit</a>
-      </span>
-    )
+    render: (text: string, record: any) => <span>Edit</span>
   }
 ];
 

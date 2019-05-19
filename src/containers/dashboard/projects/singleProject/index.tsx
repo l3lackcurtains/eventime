@@ -1,18 +1,17 @@
-import React, { useState, Fragment } from "react";
-import { Icon, Menu, Tag, Avatar, Input, Button, Popover, Form } from "antd";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
+import { Avatar, Button, Form, Icon, Input, Menu, Popover, Tag } from "antd";
+import React, { Fragment, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { NavLink } from "react-router-dom";
+import { dragItemsBetweenArray, reorderArray } from "../../../../utils/helpers";
+import { projectDatas } from "./data";
 import {
-  ProjectWrapper,
   ProjectArea,
+  ProjectAreaEmpty,
   ProjectCard,
   ProjectCards,
-  TaskDropdown,
-  ProjectAreaEmpty
+  ProjectWrapper,
+  TaskDropdown
 } from "./styled";
-
-import { projectDatas } from "./data";
-import { reorderArray, dragItemsBetweenArray } from "../../../../utils/helpers";
 
 const { TextArea } = Input;
 
@@ -29,7 +28,7 @@ const SingleProject = (props: any) => {
     e.preventDefault();
     const index = 0;
     projectTasks[index].content.push({
-      id: "item",
+      id: `item`,
       content: "More data"
     });
 
@@ -93,6 +92,7 @@ const SingleProject = (props: any) => {
       Object.keys(result).map((key: any) => {
         const keyId = key.split("-")[1];
         projectTasksData[keyId].content = result[key];
+        return result[key];
       });
       setProjectTasks(projectTasksData);
     }
@@ -109,10 +109,10 @@ const SingleProject = (props: any) => {
                 overlay={
                   <Menu>
                     <Menu.Item key="0">
-                      <a href="http://www.alipay.com/">1st menu item</a>
+                      <NavLink to="/">1st menu item</NavLink>
                     </Menu.Item>
                     <Menu.Item key="1">
-                      <a href="http://www.taobao.com/">2nd menu item</a>
+                      <NavLink to="/">2nd menu item</NavLink>
                     </Menu.Item>
                     <Menu.Divider />
                     <Menu.Item key="3">3rd menu item</Menu.Item>
@@ -120,12 +120,12 @@ const SingleProject = (props: any) => {
                 }
                 trigger={["click"]}
               >
-                <a className="ant-dropdown-link" href="#">
+                <p className="ant-dropdown-link">
                   <span>Task 1</span>
                   <span>
                     <Tag color="magenta">4</Tag> <Icon type="down" />
                   </span>
-                </a>
+                </p>
               </TaskDropdown>
               <p>11h 35m</p>
 
