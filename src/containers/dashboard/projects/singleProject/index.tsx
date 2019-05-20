@@ -16,7 +16,7 @@ const SingleProject = (props: any) => {
     }
   });
 
-  if (loading) return null;
+  if (loading || !!error) return null;
 
   const projectData = data.getProjectBySlug.result;
 
