@@ -63,7 +63,6 @@
     "react-apollo": "^2.5.5",
     "react-apollo-hooks": "^0.4.5",
     "react-app-polyfill": "^1.0.0",
-    "react-app-rewired": "^2.1.3",
     "react-beautiful-dnd": "^11.0.2",
     "react-dev-utils": "^9.0.0",
     "react-dom": "^16.8.6",

@@ -1,8 +1,13 @@
-import { Avatar, Button, Form, Icon, Input, Menu, Popover, Tag } from "antd";
+import { Avatar, Button, Form, Icon, Menu, Popover, Tag } from "antd";
+import { Formik } from "formik";
 import React, { Fragment, useState } from "react";
 import { useMutation } from "react-apollo-hooks";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { NavLink } from "react-router-dom";
+import * as Yup from "yup";
+import { CustomTextArea } from "../../../../components/fields/formFields";
+import { CREATE_SECTION } from "../../../../graphql/project/createSection";
+import { CREATE_TASK } from "../../../../graphql/project/createTask";
 import {
   REORDER_TASK,
   REORDER_TASK_BETWEEN_SECTIONS
@@ -16,43 +21,37 @@ import {
   ProjectWrapper,
   TaskDropdown
 } from "./styled";
+import TaskView from "./taskView";
 
-const { TextArea } = Input;
+const CreateTaskSchema = Yup.object().shape({
+  name: Yup.string().required("Name is Required")
+});
 
 const ProjectView = (props: any) => {
-  /**
-   * *********************************************
-   * Get Project Data
-   * *********************************************
-   */
-  const { projectData } = props;
+  // Get projects data
+  const { projectTasks, refetchProject } = props;
 
-  const [projectTasks, setProjectTasks] = useState(projectData);
-  /**
-   * *********************************************
-   * Reorder API call
-   * *********************************************
-   */
-
+  // Reorder Tasks API
   const reorderTask = useMutation(REORDER_TASK);
   const reorderTaskBetweenSections = useMutation(REORDER_TASK_BETWEEN_SECTIONS);
 
-  /**
-   * *********************************************
-   * Project add cards
-   * *********************************************
-   */
+  // Add Task card api
+  const createTask = useMutation(CREATE_TASK);
 
-  const onAddCard = (e: any) => {
-    e.preventDefault();
-    const index = 0;
-    projectTasks[index].content.push({
-      id: `item`,
-      name: "More data"
-    });
+  // Add section
+  const createSection = useMutation(CREATE_SECTION);
 
-    setProjectTasks(projectTasks);
+  // Task View Modal
+  const [taskModalVisible, setTaskModalVisible] = useState(false);
+
+  const toggleTaskView = (state: boolean) => {
+    setTaskModalVisible(state);
   };
+
+  const [currentTask, setCurrentTask] = useState({
+    sectionIndex: 0,
+    taskIndex: 0
+  });
 
   /**
    * **********************************************
@@ -65,13 +64,49 @@ const ProjectView = (props: any) => {
     setAddProjectAreaButton(false);
   };
 
-  const onAddProjectArea = (e: any) => {
-    setAddProjectAreaButton(true);
-    projectTasks.push({
-      id: "asas",
-      tasks: []
-    });
-    setProjectTasks(projectTasks);
+  // Handle section create
+  const handleCreateSection = async (
+    values: any,
+    { setSubmitting, setStatus, resetForm }: any
+  ) => {
+    try {
+      const { name } = values;
+      await createSection({
+        variables: {
+          projectId: projectTasks.id,
+          name
+        }
+      });
+
+      resetForm();
+      refetchProject();
+    } catch (e) {
+      setStatus({ success: false });
+      setSubmitting(false);
+    }
+  };
+
+  // handle create task
+  const handleCreateTask = async (
+    sectionIndex: number,
+    values: any,
+    { setSubmitting, setStatus, resetForm }: any
+  ) => {
+    try {
+      const { name } = values;
+      const allTasks = JSON.parse(JSON.stringify(projectTasks));
+      await createTask({
+        variables: {
+          sectionId: allTasks.sections[sectionIndex].id,
+          name
+        }
+      });
+      resetForm();
+      refetchProject();
+    } catch (e) {
+      setStatus({ success: false });
+      setSubmitting(false);
+    }
   };
 
   /**
@@ -81,7 +116,7 @@ const ProjectView = (props: any) => {
    * *******************************
    */
 
-  const onDragCardEnd = (result: any) => {
+  const onDragCardEnd = async (result: any) => {
     const { source, destination } = result;
     // dropped outside the
     if (!destination) {
@@ -97,14 +132,14 @@ const ProjectView = (props: any) => {
       );
       const projectTasksData = projectTasks;
       projectTasksData.sections[taskId].tasks = items;
-      setProjectTasks(projectTasksData);
-      reorderTask({
+      await reorderTask({
         variables: {
           sectionId: projectTasks.sections[taskId].id,
           from: source.index,
           to: destination.index
         }
       });
+      refetchProject();
     } else {
       const srcTaskId = source.droppableId.split("-")[1];
       const destTaskId = destination.droppableId.split("-")[1];
@@ -120,8 +155,7 @@ const ProjectView = (props: any) => {
         projectTasksData.sections[keyId].tasks = result[key];
         return result[key];
       });
-      setProjectTasks(projectTasksData);
-      reorderTaskBetweenSections({
+      await reorderTaskBetweenSections({
         variables: {
           sourceSectionId: projectTasks.sections[srcTaskId].id,
           destinationSectionId: projectTasks.sections[destTaskId].id,
@@ -129,15 +163,16 @@ const ProjectView = (props: any) => {
           to: destination.index
         }
       });
+      refetchProject();
     }
   };
 
   return (
     <>
-      <h1>{projectData.name}</h1>
+      <h1>{projectTasks.name}</h1>
       <ProjectWrapper>
         <DragDropContext onDragEnd={res => onDragCardEnd(res)}>
-          {projectTasks.sections.map((section: any, index: any) => (
+          {projectTasks.sections.map((section: any, sectionIndex: any) => (
             <ProjectArea>
               <TaskDropdown
                 overlay={
@@ -163,60 +198,86 @@ const ProjectView = (props: any) => {
               </TaskDropdown>
               <p>11h 35m</p>
 
-              <Droppable droppableId={`droppable-${index}`}>
-                {(provided, snapshot) => (
+              <Droppable droppableId={`droppable-${sectionIndex}`}>
+                {provided => (
                   <ProjectCards
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
-                    {section.tasks.map((subtask: any, index: number) => (
-                      <Draggable
-                        key={subtask.id}
-                        draggableId={subtask.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            ref={provided.innerRef}
-                          >
-                            <ProjectCard>
-                              <p>{subtask.name}</p>
-                              <div className="card-meta">
-                                <p>11h 2m of 16h</p>
-                                <div>
-                                  <Avatar
-                                    size="small"
-                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                  />
-                                  <Avatar
-                                    size="small"
-                                    style={{
-                                      backgroundColor: "#87d068"
-                                    }}
-                                    icon="user"
-                                  />
+                    {section.tasks.map((subTask: any, taskIndex: number) => (
+                      <>
+                        <Draggable
+                          key={subTask.id}
+                          draggableId={subTask.id}
+                          index={taskIndex}
+                        >
+                          {provided => (
+                            <div
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              ref={provided.innerRef}
+                            >
+                              <ProjectCard
+                                onClick={() => {
+                                  setCurrentTask({ sectionIndex, taskIndex });
+                                  toggleTaskView(true);
+                                }}
+                              >
+                                <p>{subTask.name}</p>
+                                <div className="card-meta">
+                                  <p>11h 2m of 16h</p>
+                                  <div>
+                                    <Avatar
+                                      size="small"
+                                      src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                    />
+                                    <Avatar
+                                      size="small"
+                                      style={{
+                                        backgroundColor: "#87d068"
+                                      }}
+                                      icon="user"
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            </ProjectCard>
-                          </div>
-                        )}
-                      </Draggable>
+                              </ProjectCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      </>
                     ))}
                     <Popover
                       placement="rightBottom"
                       content={
                         <Fragment>
-                          <Form onSubmit={onAddCard}>
-                            <TextArea rows={4} />
-                            <Button type="primary" htmlType="submit" block>
-                              Add Card
-                            </Button>
-                          </Form>
+                          <Formik
+                            initialValues={{ name: "" }}
+                            validationSchema={CreateTaskSchema}
+                            onSubmit={(...args) =>
+                              handleCreateTask(sectionIndex, ...args)
+                            }
+                            render={(props: any) => (
+                              <Form onSubmit={props.handleSubmit}>
+                                <CustomTextArea
+                                  rows={4}
+                                  name="name"
+                                  placeholder="Task Name"
+                                />
+                                <Form.Item>
+                                  <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    block
+                                  >
+                                    Add Card
+                                  </Button>
+                                </Form.Item>
+                              </Form>
+                            )}
+                          />
                         </Fragment>
                       }
-                      trigger="click"
+                      trigger="hover"
                     >
                       <Button type="dashed" block>
                         Add Card
@@ -242,15 +303,42 @@ const ProjectView = (props: any) => {
                 </ProjectAreaEmpty>
               ) : (
                 <ProjectAreaEmpty>
-                  <TextArea rows={4} />
-                  <Button type="primary" block onClick={onAddProjectArea}>
-                    Add
-                  </Button>
+                  <Formik
+                    initialValues={{ name: "" }}
+                    validationSchema={CreateTaskSchema}
+                    onSubmit={handleCreateSection}
+                    render={(props: any) => (
+                      <Form onSubmit={props.handleSubmit}>
+                        <CustomTextArea
+                          rows={4}
+                          name="name"
+                          placeholder="Section Name"
+                        />
+                        <Form.Item>
+                          <Button type="primary" htmlType="submit" block>
+                            Add Section
+                          </Button>
+                        </Form.Item>
+                      </Form>
+                    )}
+                  />
                 </ProjectAreaEmpty>
               )}
             </ProjectCards>
           </ProjectArea>
         </DragDropContext>
+        {currentTask ? (
+          <TaskView
+            currentTask={
+              projectTasks.sections[currentTask.sectionIndex].tasks[
+                currentTask.taskIndex
+              ]
+            }
+            taskModalVisible={taskModalVisible}
+            toggleTaskView={toggleTaskView}
+            refetchProject={refetchProject}
+          />
+        ) : null}
       </ProjectWrapper>
     </>
   );

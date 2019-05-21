@@ -13,6 +13,9 @@ const GET_PROJECT_BY_SLUG = gql`
           tasks {
             id
             name
+            description
+            dueAt
+            createdAt
           }
         }
       }
