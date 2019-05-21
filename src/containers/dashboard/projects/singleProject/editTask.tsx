@@ -1,4 +1,4 @@
-import { Button, Divider, Form } from "antd";
+import { Button, Divider, Form, Modal } from "antd";
 import { Formik } from "formik";
 import React from "react";
 import { useMutation } from "react-apollo-hooks";
@@ -22,22 +22,29 @@ const EditTask = (props: any) => {
   const deleteTask = useMutation(DELETE_TASK);
 
   const { name, description, dueAt } = task;
-
+  const confirm = Modal.confirm;
   const handleDeleteTask = async (e: any) => {
     e.preventDefault();
-    if (window.confirm("Are you sure to delete this task?")) {
-      const destroy = await deleteTask({
-        variables: {
-          id: task.id
-        }
-      });
 
-      if (destroy.data.deleteTask) {
-        refetchProject();
-        setShowEditTask(false);
-        toggleTaskView(false);
-      }
-    }
+    confirm({
+      title: "Do you want to delete this section",
+      content:
+        "Deleting the section will also removes all the tasks associated with it.",
+      async onOk() {
+        const destroy = await deleteTask({
+          variables: {
+            id: task.id
+          }
+        });
+
+        if (destroy.data.deleteTask) {
+          refetchProject();
+          setShowEditTask(false);
+          toggleTaskView(false);
+        }
+      },
+      onCancel() {}
+    });
   };
 
   const handleUpdate = async (values: any) => {

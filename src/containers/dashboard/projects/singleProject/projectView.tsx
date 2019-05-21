@@ -1,9 +1,18 @@
-import { Avatar, Button, Form, Icon, Menu, Popover, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Form,
+  Icon,
+  Menu,
+  Modal,
+  Popover,
+  Tag
+} from "antd";
 import { Formik } from "formik";
 import React, { Fragment, useState } from "react";
 import { useMutation } from "react-apollo-hooks";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
 import { CustomTextArea } from "../../../../components/fields/formFields";
 import { CREATE_SECTION } from "../../../../graphql/project/createSection";
@@ -12,7 +21,9 @@ import {
   REORDER_TASK,
   REORDER_TASK_BETWEEN_SECTIONS
 } from "../../../../graphql/project/reorderTask";
+import DELETE_SECTION from "../../../../graphql/section/deleteSection";
 import { dragItemsBetweenArray, reorderArray } from "../../../../utils/helpers";
+import EditSection from "./editSection";
 import {
   ProjectArea,
   ProjectAreaEmpty,
@@ -53,11 +64,10 @@ const ProjectView = (props: any) => {
     taskIndex: 0
   });
 
-  /**
-   * **********************************************
-   * Project area addition
-   * **********************************************
-   */
+  // delete section
+  const deleteSection = useMutation(DELETE_SECTION);
+
+  // Project area create
   const [addProjectAreaButton, setAddProjectAreaButton] = useState(true);
 
   const onShowAddProjectArea = () => {
@@ -108,6 +118,33 @@ const ProjectView = (props: any) => {
       setSubmitting(false);
     }
   };
+
+  // handle delete section
+  const confirm = Modal.confirm;
+  const handleDeleteSection = async (id: String) => {
+    confirm({
+      title: "Do you want to delete this section",
+      content:
+        "Deleting the section will also removes all the tasks associated with it.",
+      async onOk() {
+        await deleteSection({
+          variables: {
+            id
+          }
+        });
+        refetchProject();
+        Modal.destroyAll();
+      },
+      onCancel() {
+        Modal.destroyAll();
+      },
+      zIndex: 1000000,
+      maskClosable: true
+    });
+  };
+
+  // edit section view
+  const [editSectionView, setEditSectionView] = useState(false);
 
   /**
    * ********************************
@@ -176,16 +213,30 @@ const ProjectView = (props: any) => {
             <ProjectArea>
               <TaskDropdown
                 overlay={
-                  <Menu>
-                    <Menu.Item key="0">
-                      <NavLink to="/">1st menu item</NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="1">
-                      <NavLink to="/">2nd menu item</NavLink>
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item key="3">3rd menu item</Menu.Item>
-                  </Menu>
+                  <>
+                    {editSectionView ? (
+                      <Card>
+                        <EditSection
+                          setEditSectionView={setEditSectionView}
+                          refetchProject={refetchProject}
+                          section={section}
+                        />
+                      </Card>
+                    ) : (
+                      <Menu>
+                        <Menu.Item key="0">
+                          <a onClick={() => setEditSectionView(true)}>
+                            Rename Section
+                          </a>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <a onClick={() => handleDeleteSection(section.id)}>
+                            Delete Section
+                          </a>
+                        </Menu.Item>
+                      </Menu>
+                    )}
+                  </>
                 }
                 trigger={["click"]}
               >
@@ -277,7 +328,7 @@ const ProjectView = (props: any) => {
                           />
                         </Fragment>
                       }
-                      trigger="hover"
+                      trigger="click"
                     >
                       <Button type="dashed" block>
                         Add Card

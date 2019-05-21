@@ -23,9 +23,13 @@ const TaskView = (props: any) => {
       title={null}
       visible={taskModalVisible}
       onOk={() => toggleTaskView(false)}
-      onCancel={() => toggleTaskView(false)}
+      onCancel={() => {
+        toggleTaskView(false);
+        setShowEditTask(false);
+      }}
       footer={null}
       width={700}
+      destroyOnClose
     >
       <Row>
         <h3>{currentTask.name}</h3>
