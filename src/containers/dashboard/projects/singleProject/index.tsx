@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "react-apollo-hooks";
-import GET_PROJECT_BY_SLUG from "../../../../graphql/project/getProject";
+import { GET_PROJECT_BY_SLUG } from "../../../../graphql/project/getProject";
 import ProjectView from "./projectView";
 
 const SingleProject = (props: any) => {

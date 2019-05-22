@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const UPDATE_SECTION = gql`
+export const UPDATE_SECTION = gql`
   mutation UpdateSection($id: ID!, $name: String) {
     updateSection(id: $id, name: $name) {
       success
@@ -8,5 +8,3 @@ const UPDATE_SECTION = gql`
     }
   }
 `;
-
-export default UPDATE_SECTION;

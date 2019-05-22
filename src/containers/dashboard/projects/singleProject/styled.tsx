@@ -42,9 +42,11 @@ export const ProjectCard = styled(Card)`
   .card-meta {
     display: flex;
     flex-direction: row;
+    align-items: baseline;
     justify-content: space-between;
     font-size: 0.8em;
     color: #999;
+    margin: 8px 0;
   }
 `;
 

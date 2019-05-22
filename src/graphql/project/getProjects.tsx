@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const GET_PROJECTS = gql`
+export const GET_PROJECTS = gql`
   {
     getProjects {
       success
@@ -12,5 +12,3 @@ const GET_PROJECTS = gql`
     }
   }
 `;
-
-export default GET_PROJECTS;

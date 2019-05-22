@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const UPDATE_TASK = gql`
+export const UPDATE_TASK = gql`
   mutation UpdateTask(
     $id: ID!
     $name: String
@@ -20,5 +20,3 @@ const UPDATE_TASK = gql`
     }
   }
 `;
-
-export default UPDATE_TASK;

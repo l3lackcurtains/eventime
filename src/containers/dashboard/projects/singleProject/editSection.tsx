@@ -5,7 +5,7 @@ import { useMutation } from "react-apollo-hooks";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { CustomTextInput } from "../../../../components/fields/formFields";
-import UPDATE_SECTION from "../../../../graphql/section/updateSection";
+import { UPDATE_SECTION } from "../../../../graphql/section/updateSection";
 
 const EditSectionSchema = Yup.object().shape({
   name: Yup.string().required("Name is Required")
@@ -60,10 +60,6 @@ const EditSection = (props: any) => {
 };
 
 const ActionButton = styled(Button)`
-  margin-right: 16px;
-`;
-
-const DeleteButton = styled(Button)`
   margin-right: 16px;
 `;
 

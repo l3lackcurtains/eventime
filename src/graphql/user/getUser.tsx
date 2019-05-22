@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const GET_USER = gql`
+export const GET_USER = gql`
   {
     getUser {
       success
@@ -10,5 +10,3 @@ const GET_USER = gql`
     }
   }
 `;
-
-export default GET_USER;

@@ -1,20 +1,9 @@
+import { Col, DatePicker, Form, Input, Row } from "antd";
 import React from "react";
-import { Form, Input, Select, Row, Col, DatePicker } from "antd";
 
 const { TextArea } = Input;
 
-const children: any[] = [];
-for (let i = 10; i < 36; i++) {
-  children.push(
-    <Select.Option key={i.toString(36) + i}>{i.toString(36) + i}</Select.Option>
-  );
-}
-
 const AddClient = () => {
-  function handleChange(value: any) {
-    console.log(`selected ${value}`);
-  }
-
   function onChange(date: any, dateString: string) {
     console.log(date, dateString);
   }
@@ -24,18 +13,6 @@ const AddClient = () => {
       <Form layout="vertical">
         <Form.Item label="Client name">
           <Input size="large" placeholder="Name of client" />
-        </Form.Item>
-        <Form.Item label="Projects">
-          <Select
-            size="large"
-            mode="multiple"
-            style={{ width: "100%" }}
-            placeholder="Please select"
-            defaultValue={["a10", "c12"]}
-            onChange={handleChange}
-          >
-            {children}
-          </Select>
         </Form.Item>
         <Form.Item label="Client Information">
           <TextArea

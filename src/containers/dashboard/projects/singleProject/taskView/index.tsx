@@ -2,7 +2,9 @@ import { Button, Col, Divider, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import styled from "styled-components";
+import AddTimeButton from "./addTimeButton";
 import EditTask from "./editTask";
+import TaskTimerButton from "./taskTimerButton";
 
 const TaskView = (props: any) => {
   // Task Modal
@@ -20,7 +22,7 @@ const TaskView = (props: any) => {
 
   return (
     <Modal
-      title={null}
+      title={currentTask.name}
       visible={taskModalVisible}
       onOk={() => toggleTaskView(false)}
       onCancel={() => {
@@ -31,10 +33,6 @@ const TaskView = (props: any) => {
       width={700}
       destroyOnClose
     >
-      <Row>
-        <h3>{currentTask.name}</h3>
-      </Row>
-      <Divider />
       {showEditTask ? (
         <EditTask
           setShowEditTask={setShowEditTask}
@@ -49,12 +47,8 @@ const TaskView = (props: any) => {
               <p>{currentTask.description || "No description."}</p>
             </Col>
             <Col xs={24} sm={4}>
-              <ActionButton type="primary" block>
-                Start Timer
-              </ActionButton>
-              <ActionButton type="primary" block>
-                Add Time
-              </ActionButton>
+              <TaskTimerButton currentTask={currentTask} />
+              <AddTimeButton currentTask={currentTask} />
               <ActionButton block onClick={() => setShowEditTask(true)}>
                 Edit Task
               </ActionButton>

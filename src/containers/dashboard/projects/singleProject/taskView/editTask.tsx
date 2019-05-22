@@ -8,9 +8,9 @@ import {
   CustomDatePicker,
   CustomTextArea,
   CustomTextInput
-} from "../../../../components/fields/formFields";
-import DELETE_TASK from "../../../../graphql/task/deleteTask";
-import UPDATE_TASK from "../../../../graphql/task/updateTask";
+} from "../../../../../components/fields/formFields";
+import { DELETE_TASK } from "../../../../../graphql/task/deleteTask";
+import { UPDATE_TASK } from "../../../../../graphql/task/updateTask";
 
 const EditTaskSchema = Yup.object().shape({
   name: Yup.string().required("Name is Required")

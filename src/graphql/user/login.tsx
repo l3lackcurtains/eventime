@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-const LOGIN = gql`
+export const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       success
@@ -8,5 +8,3 @@ const LOGIN = gql`
     }
   }
 `;
-
-export default LOGIN;

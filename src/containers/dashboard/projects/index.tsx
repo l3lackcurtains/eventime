@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import GET_PROJECTS from "../../../graphql/project/getProjects";
-import AddProject from "./addProject";
+import { GET_PROJECTS } from "../../../graphql/project/getProjects";
+import CreateProject from "./createProject";
 
 const menu = (
   <Menu>
@@ -78,7 +78,7 @@ const Projects = () => {
   // TODO: Show starting point to create project, if no projects exist
 
   return (
-    <div>
+    <>
       <Card
         title={
           <>
@@ -117,12 +117,13 @@ const Projects = () => {
       <Modal
         title="Create Project"
         visible={createProjectModalVisible}
+        footer={null}
         onOk={() => onChangeProjectModalState(false)}
         onCancel={() => onChangeProjectModalState(false)}
       >
-        <AddProject />
+        <CreateProject />
       </Modal>
-    </div>
+    </>
   );
 };
 

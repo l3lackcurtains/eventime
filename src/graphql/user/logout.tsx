@@ -6,4 +6,4 @@ const LOGOUT = gql`
   }
 `;
 
-export default LOGOUT;
+export default { LOGOUT };
