@@ -241,8 +241,8 @@ const CustomMultipleSelect = (props: any) => {
 };
 
 const CustomAlert = styled(Alert)`
-  margin-bottom: 8px;
-  margin-top: -8px;
+  margin-bottom: 16px;
+  margin-top: -24px;
 `;
 
 export {

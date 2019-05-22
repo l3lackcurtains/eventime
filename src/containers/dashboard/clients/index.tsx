@@ -1,7 +1,9 @@
 import { Button, Card, Dropdown, Menu, Modal, Table } from "antd";
 import React, { useState } from "react";
+import { useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
-import AddClient from "./addClient";
+import { GET_CLIENTS } from "../../../graphql/client/getClients";
+import CreateClient from "./createClient";
 
 const menu = (
   <Menu>
@@ -14,36 +16,14 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name"
-  },
-  {
-    title: "Budget",
-    dataIndex: "budget"
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    width: 200,
-    render: (text: string, record: any) => <span>Edit</span>
-  }
-];
-
-const data = [
-  {
-    key: "1",
-    name: "Bryan van Rooyen",
-    budget: "34h 55m of 120h"
-  },
-  {
-    key: "2",
-    name: "The moisture factory",
-    budget: "12h 04m of 150h"
   }
 ];
 
 const Clients = () => {
-  /**
-   * Table Rows Selection
-   */
+  // Get all clients
+  const { data, error, loading, refetch } = useQuery(GET_CLIENTS);
+
+  // Table Rows Selection
   const [selectedRowKeys, setSelectedRowKey] = useState([]);
 
   const onTableRowSelection = (selKeys: any) => {
@@ -57,10 +37,7 @@ const Clients = () => {
 
   const hasSelected = selectedRowKeys.length > 0;
 
-  /**
-   * Create Client Modal
-   */
-
+  // create client modal
   const [createClientModalVisible, setCreateClientModalVisible] = useState(
     false
   );
@@ -69,6 +46,16 @@ const Clients = () => {
     setCreateClientModalVisible(state);
   };
 
+  if (loading) return null;
+  if (!!error) {
+    return <div>Error loading client..</div>;
+  }
+
+  const clientsData = data.getClients.results;
+  clientsData.map((client: any) => {
+    client.key = client.id;
+    return client;
+  });
   return (
     <div>
       <Card
@@ -103,7 +90,7 @@ const Clients = () => {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={clientsData}
         />
       </Card>
       <Modal
@@ -113,8 +100,12 @@ const Clients = () => {
         onOk={() => onChangeClientModalState(false)}
         onCancel={() => onChangeClientModalState(false)}
         width={750}
+        footer={null}
       >
-        <AddClient />
+        <CreateClient
+          onChangeClientModalState={onChangeClientModalState}
+          refetchClients={refetch}
+        />
       </Modal>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Dropdown, Menu, Modal, Table } from "antd";
+import { Button, Card, Dropdown, Menu, Modal, Table } from "antd";
 import React, { useState } from "react";
 import { useQuery } from "react-apollo-hooks";
 import { NavLink } from "react-router-dom";
@@ -20,31 +20,11 @@ const columns = [
     render: (text: string, data: any) => {
       return <NavLink to={`/dashboard/projects/${data.slug}`}>{text}</NavLink>;
     }
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    width: 200,
-    render: (text: string, record: any) => (
-      <div>
-        <Button>Edit</Button>
-        <Divider type="vertical" />
-        <Button>Delete</Button>
-      </div>
-    )
   }
 ];
 
 const Projects = () => {
-  const { data, error, loading } = useQuery(GET_PROJECTS);
-
-  let projects = [];
-  if (!loading) {
-    projects = data.getProjects.results.map((p: any) => {
-      p.key = p.id;
-      return p;
-    });
-  }
+  const { data, error, loading, refetch } = useQuery(GET_PROJECTS);
 
   /**
    * Table Rows Selection
@@ -74,7 +54,16 @@ const Projects = () => {
     setCreateProjectModalVisible(state);
   };
 
-  if (loading && !!error) return null;
+  if (loading) return null;
+  if (!!error) {
+    return <div>Error loading client..</div>;
+  }
+
+  const projects = data.getProjects.results;
+  projects.map((project: any) => {
+    project.key = project.id;
+    return project;
+  });
   // TODO: Show starting point to create project, if no projects exist
 
   return (
@@ -121,7 +110,10 @@ const Projects = () => {
         onOk={() => onChangeProjectModalState(false)}
         onCancel={() => onChangeProjectModalState(false)}
       >
-        <CreateProject />
+        <CreateProject
+          setCreateProjectModalVisible={setCreateProjectModalVisible}
+          refetchProjects={refetch}
+        />
       </Modal>
     </>
   );
