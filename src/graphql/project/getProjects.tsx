@@ -12,3 +12,23 @@ export const GET_PROJECTS = gql`
     }
   }
 `;
+
+export const GET_PROJECTS_WITH_TASKS = gql`
+  {
+    getProjectWithTasks {
+      success
+      results {
+        id
+        name
+        sections {
+          id
+          name
+          tasks {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;

@@ -74,3 +74,10 @@ export const ProjectAreaEmpty = styled.div`
     padding: 80px 0;
   }
 `;
+
+export const CustomHeader = styled.div`
+  display: flex;
+  h1 {
+    margin-right: 16px;
+  }
+`;

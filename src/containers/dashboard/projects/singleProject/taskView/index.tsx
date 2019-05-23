@@ -52,7 +52,6 @@ const TaskView = (props: any) => {
               <ActionButton block onClick={() => setShowEditTask(true)}>
                 Edit Task
               </ActionButton>
-              <ActionButton block>Edit Estimate</ActionButton>
             </Col>
           </Row>
           <Divider />

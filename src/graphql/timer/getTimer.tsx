@@ -9,6 +9,7 @@ export const GET_TIMER = gql`
         startedAt
         task {
           id
+          name
         }
       }
     }

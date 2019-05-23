@@ -1,4 +1,14 @@
-import { Avatar, Button, Card, Form, Icon, Menu, Modal, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Dropdown,
+  Form,
+  Icon,
+  Menu,
+  Modal,
+  Tag
+} from "antd";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
@@ -14,8 +24,10 @@ import {
 import { DELETE_SECTION } from "../../../../graphql/section/deleteSection";
 import { dragItemsBetweenArray, reorderArray } from "../../../../utils/helpers";
 import CardTimer from "./cardTimer";
+import EditProject from "./editProject";
 import EditSection from "./editSection";
 import {
+  CustomHeader,
   ProjectArea,
   ProjectAreaEmpty,
   ProjectCard,
@@ -30,6 +42,11 @@ const CreateTaskSchema = Yup.object().shape({
 });
 
 const ProjectView = (props: any) => {
+  // Edit Project Modal
+
+  // Task View Modal
+  const [editProjectVisible, setEditProjectVisible] = useState(false);
+
   // Get projects data
   const { projectTasks, refetchProject } = props;
 
@@ -205,7 +222,27 @@ const ProjectView = (props: any) => {
 
   return (
     <>
-      <h1>{projectTasks.name}</h1>
+      <CustomHeader>
+        <h1>{projectTasks.name}</h1>
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key="0">
+                <a onClick={() => setEditProjectVisible(true)}>Edit Project</a>
+              </Menu.Item>
+              <Menu.Item key="1">
+                <a href="#">Delete Project</a>
+              </Menu.Item>
+            </Menu>
+          }
+          trigger={["click"]}
+        >
+          <a className="ant-dropdown-link" href="#">
+            <Icon type="small-dash" style={{ fontSize: 28, fontWeight: 700 }} />
+          </a>
+        </Dropdown>
+      </CustomHeader>
+
       <ProjectWrapper>
         <DragDropContext onDragEnd={res => onDragCardEnd(res)}>
           {projectTasks.sections.map((section: any, sectionIndex: any) => (
@@ -391,6 +428,20 @@ const ProjectView = (props: any) => {
             refetchProject={refetchProject}
           />
         ) : null}
+
+        <Modal
+          title={"Edit Project"}
+          visible={editProjectVisible}
+          onOk={() => setEditProjectVisible(false)}
+          onCancel={() => {
+            setEditProjectVisible(false);
+          }}
+          footer={null}
+          width={700}
+          destroyOnClose
+        >
+          <EditProject projectId={projectTasks.id} />
+        </Modal>
       </ProjectWrapper>
     </>
   );

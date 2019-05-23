@@ -1,4 +1,12 @@
-import { Alert, DatePicker, Form, Input, Select, TimePicker } from "antd";
+import {
+  Alert,
+  Cascader,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  TimePicker
+} from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { Field, FieldProps, useField } from "formik";
 import moment from "moment";
@@ -240,6 +248,59 @@ const CustomMultipleSelect = (props: any) => {
   );
 };
 
+const CustomCascader = (props: any) => {
+  const {
+    label,
+    required,
+    colon,
+    extra,
+    validateStatus,
+    value,
+    options,
+    ...rest
+  } = props;
+  const [field, meta] = useField(props.name);
+  const handleAreaClick = (e: any, label: string, option: object) => {
+    e.stopPropagation();
+  };
+  const displayRender = (labels: any, selectedOptions: any) =>
+    labels.map((label: any, i: number) => {
+      const option = selectedOptions[i];
+      if (i === labels.length - 1) {
+        return <span key={option.value}>{label}</span>;
+      }
+      return <span key={option.value}>{label} / </span>;
+    });
+  return (
+    <>
+      <Form.Item
+        label={label}
+        required={required}
+        colon={colon}
+        extra={extra}
+        validateStatus={validateStatus}
+      >
+        <Field name={field.name}>
+          {({ field: { value }, form: { setFieldValue } }: FieldProps) => (
+            <Cascader
+              options={options}
+              displayRender={displayRender}
+              value={value ? value : undefined}
+              onChange={(selected: any) => setFieldValue(field.name, selected)}
+              size="large"
+              defaultValue={[]}
+              {...rest}
+            />
+          )}
+        </Field>
+      </Form.Item>
+      {meta.touched && meta.error ? (
+        <CustomAlert message={meta.error} type="error" />
+      ) : null}
+    </>
+  );
+};
+
 const CustomAlert = styled(Alert)`
   margin-bottom: 16px;
   margin-top: -24px;
@@ -251,5 +312,6 @@ export {
   CustomDatePicker,
   CustomTimePicker,
   CustomSelect,
-  CustomMultipleSelect
+  CustomMultipleSelect,
+  CustomCascader
 };

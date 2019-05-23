@@ -24,4 +24,45 @@ const dragItemsBetweenArray: any = (
   return result;
 };
 
-export { reorderArray, dragItemsBetweenArray };
+const groupedTimerRecords: any = (data: any) => {
+  const groups = data.reduce((groups: any, rec: any) => {
+    const date = rec.date.split("T")[0];
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(rec);
+    return groups;
+  }, {});
+
+  const groupArrays = Object.keys(groups).map(date => {
+    const groupByTask = groups[date].reduce((groups: any, rec: any) => {
+      const taskId = rec.task.id;
+      if (!groups[taskId]) {
+        groups[taskId] = [];
+      }
+      groups[taskId].push(rec);
+      return groups;
+    }, {});
+
+    const groupTaskArray = Object.keys(groupByTask).map(task => {
+      const totalDuration = groupByTask[task].reduce(
+        (sum: any, dur: any) => parseInt(dur.duration) + sum,
+        0
+      );
+      return {
+        task: groupByTask[task][0].task.name,
+        totalDuration,
+        taskRecords: groupByTask[task]
+      };
+    });
+
+    return {
+      date,
+      dateRecords: groupTaskArray
+    };
+  });
+
+  return groupArrays;
+};
+
+export { reorderArray, dragItemsBetweenArray, groupedTimerRecords };
