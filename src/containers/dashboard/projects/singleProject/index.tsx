@@ -13,6 +13,8 @@ const SingleProject = (props: any) => {
 
   if (loading) return null;
   if (error) return `Error! ${error}`;
+  if (!data.getProjectBySlug.success)
+    return <p>{data.getProjectBySlug.message}</p>;
   return (
     <ProjectView
       projectTasks={data.getProjectBySlug.result}

@@ -25,7 +25,7 @@ const CustomTextInput = (props: any) => {
         extra={extra}
         validateStatus={validateStatus}
       >
-        <Input size="large" {...rest} {...field} />
+        <Input {...rest} {...field} />
       </Form.Item>
       {meta.touched && meta.error ? (
         <CustomAlert message={meta.error} type="error" />
@@ -47,7 +47,7 @@ const CustomTextArea = (props: any) => {
         extra={extra}
         validateStatus={validateStatus}
       >
-        <TextArea size="large" {...rest} {...field} />
+        <TextArea {...rest} {...field} />
       </Form.Item>
       {meta.touched && meta.error ? (
         <CustomAlert message={meta.error} type="error" />
@@ -84,7 +84,6 @@ const CustomDatePicker = (props: any) => {
               onChange={date =>
                 setFieldValue(field.name, date ? date.toISOString() : null)
               }
-              size="large"
               {...rest}
             />
           )}
@@ -125,7 +124,6 @@ const CustomTimePicker = (props: any) => {
               onChange={time =>
                 setFieldValue(field.name, time ? time.toISOString() : null)
               }
-              size="large"
               use12Hours
               format="h:mm a"
               {...rest}
@@ -166,7 +164,6 @@ const CustomSelect = (props: any) => {
           {({ field: { value }, form: { setFieldValue } }: FieldProps) => (
             <Select
               showSearch
-              size="large"
               value={value ? value : undefined}
               optionFilterProp="children"
               onChange={(selected: any) => setFieldValue(field.name, selected)}
@@ -220,7 +217,6 @@ const CustomMultipleSelect = (props: any) => {
             <Select
               showSearch
               mode="multiple"
-              size="large"
               value={value ? value : undefined}
               optionFilterProp="children"
               defaultValue={[]}
@@ -287,7 +283,6 @@ const CustomCascader = (props: any) => {
               displayRender={displayRender}
               value={value ? value : undefined}
               onChange={(selected: any) => setFieldValue(field.name, selected)}
-              size="large"
               defaultValue={[]}
               {...rest}
             />

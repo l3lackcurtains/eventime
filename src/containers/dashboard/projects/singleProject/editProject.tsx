@@ -10,18 +10,18 @@ import {
   CustomTextInput
 } from "../../../../components/fields/formFields";
 import { GET_CLIENTS } from "../../../../graphql/client/getClients";
-import { CREATE_PROJECT } from "../../../../graphql/project/createProject";
 import { GET_PROJECT } from "../../../../graphql/project/getProject";
+import { UPDATE_PROJECT } from "../../../../graphql/project/updateProject";
 import { GET_WORKSPACE_USERS } from "../../../../graphql/user/getWorkspaceUsers";
 
-const createProjectSchema = Yup.object().shape({
+const updateProjectSchema = Yup.object().shape({
   name: Yup.string().required("Name is Required"),
   client: Yup.string().required("Client is Required"),
   members: Yup.array().required("Atleast one Member is Required")
 });
 
 const EditProject = (props: any) => {
-  const { projectId } = props;
+  const { projectId, refetchProject, setEditProjectVisible } = props;
 
   const getProject = useQuery(GET_PROJECT, {
     variables: {
@@ -29,28 +29,31 @@ const EditProject = (props: any) => {
     }
   });
 
-  console.log(getProject.data);
-
   const getClients = useQuery(GET_CLIENTS);
   const getUsers = useQuery(GET_WORKSPACE_USERS);
 
-  const createProject = useMutation(CREATE_PROJECT);
+  const updateProject = useMutation(UPDATE_PROJECT);
 
-  const handleCreateProject = async (values: any, { resetForm }: any) => {
+  const handleUpdateProject = async (values: any, { resetForm }: any) => {
     const { name, client, members } = values;
 
-    const created = await createProject({
+    const updated = await updateProject({
       variables: {
+        id: projectId,
         name,
         clientId: client,
         users: members
       }
     });
 
-    if (created.data.createProject.success) {
+    if (updated.data.updateProject.success) {
       resetForm();
+      refetchProject();
+      setEditProjectVisible(false);
+      getProject.refetch();
     }
   };
+
   let clientsData: any[] = [];
   if (!getClients.loading && !getClients.error) {
     const clients = getClients.data.getClients.results;
@@ -73,14 +76,26 @@ const EditProject = (props: any) => {
     });
   }
 
+  if (getProject.loading) return null;
+
+  const project = getProject.data.getProject.result;
+
   if (clientsData.length === 0) {
     return <p>You must add client first.</p>;
   }
+
   return (
     <Formik
-      initialValues={{}}
-      validationSchema={createProjectSchema}
-      onSubmit={handleCreateProject}
+      initialValues={{
+        name: project.name,
+        client: project.client.id,
+        members: project.users.reduce((groups: any, u: any) => {
+          groups.push(u.id);
+          return groups;
+        }, [])
+      }}
+      validationSchema={updateProjectSchema}
+      onSubmit={handleUpdateProject}
       render={(props: any) => (
         <Form layout="vertical" onSubmit={props.handleSubmit}>
           <CustomTextInput
@@ -109,7 +124,7 @@ const EditProject = (props: any) => {
 
           <Form.Item>
             <ActionButton type="primary" htmlType="submit">
-              Create Project
+              Update Project
             </ActionButton>
           </Form.Item>
         </Form>

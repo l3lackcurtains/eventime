@@ -4,6 +4,7 @@ export const GET_PROJECT_BY_SLUG = gql`
   query GetProjectBySlug($slug: String!) {
     getProjectBySlug(slug: $slug) {
       success
+      message
       result {
         id
         name
@@ -17,6 +18,10 @@ export const GET_PROJECT_BY_SLUG = gql`
             dueAt
             createdAt
           }
+        }
+        budget {
+          amount
+          type
         }
       }
     }

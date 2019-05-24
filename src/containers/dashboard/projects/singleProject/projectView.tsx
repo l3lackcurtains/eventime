@@ -23,6 +23,7 @@ import {
 } from "../../../../graphql/project/reorderTask";
 import { DELETE_SECTION } from "../../../../graphql/section/deleteSection";
 import { dragItemsBetweenArray, reorderArray } from "../../../../utils/helpers";
+import BudgetView from "./budgetView";
 import CardTimer from "./cardTimer";
 import EditProject from "./editProject";
 import EditSection from "./editSection";
@@ -223,24 +224,34 @@ const ProjectView = (props: any) => {
   return (
     <>
       <CustomHeader>
-        <h1>{projectTasks.name}</h1>
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="0">
-                <a onClick={() => setEditProjectVisible(true)}>Edit Project</a>
-              </Menu.Item>
-              <Menu.Item key="1">
-                <a href="#">Delete Project</a>
-              </Menu.Item>
-            </Menu>
-          }
-          trigger={["click"]}
-        >
-          <a className="ant-dropdown-link" href="#">
-            <Icon type="small-dash" style={{ fontSize: 28, fontWeight: 700 }} />
-          </a>
-        </Dropdown>
+        <div className="left-actions">
+          <h1>{projectTasks.name}</h1>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="0">
+                  <a onClick={() => setEditProjectVisible(true)}>
+                    Edit Project
+                  </a>
+                </Menu.Item>
+                <Menu.Item key="1">
+                  <a href="#">Delete Project</a>
+                </Menu.Item>
+              </Menu>
+            }
+            trigger={["click"]}
+          >
+            <a className="ant-dropdown-link" href="#">
+              <Icon
+                type="small-dash"
+                style={{ fontSize: 28, fontWeight: 700 }}
+              />
+            </a>
+          </Dropdown>
+        </div>
+        <div className="right-actions">
+          <BudgetView project={projectTasks} refetchProject={refetchProject} />
+        </div>
       </CustomHeader>
 
       <ProjectWrapper>
@@ -440,7 +451,11 @@ const ProjectView = (props: any) => {
           width={700}
           destroyOnClose
         >
-          <EditProject projectId={projectTasks.id} />
+          <EditProject
+            projectId={projectTasks.id}
+            refetchProject={refetchProject}
+            setEditProjectVisible={setEditProjectVisible}
+          />
         </Modal>
       </ProjectWrapper>
     </>

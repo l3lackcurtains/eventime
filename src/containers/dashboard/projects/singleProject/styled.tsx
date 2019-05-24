@@ -77,6 +77,10 @@ export const ProjectAreaEmpty = styled.div`
 
 export const CustomHeader = styled.div`
   display: flex;
+  justify-content: space-between;
+  .left-actions {
+    display: flex;
+  }
   h1 {
     margin-right: 16px;
   }
