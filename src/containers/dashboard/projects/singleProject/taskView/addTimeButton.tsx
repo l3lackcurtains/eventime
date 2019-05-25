@@ -25,7 +25,7 @@ const AddTimeButton = (props: any) => {
   const { currentTask } = props;
   const addTime = useMutation(ADD_TIME_TO_TASK);
 
-  const { project } = useContext(ProjectContext);
+  const { project, refetchProject } = useContext(ProjectContext);
 
   const getBudget = useQuery(GET_PROJECT_BUDGET, {
     variables: {
@@ -53,6 +53,7 @@ const AddTimeButton = (props: any) => {
       });
       setShowForms(false);
       getBudget.refetch();
+      refetchProject();
     }
   };
 

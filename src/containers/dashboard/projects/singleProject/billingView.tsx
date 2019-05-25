@@ -9,6 +9,7 @@ import {
   CustomTextInput
 } from "../../../../components/fields/formFields";
 import { GET_PROJECT_BILLING } from "../../../../graphql/project/getProjectBilling";
+import { GET_PROJECT_BUDGET } from "../../../../graphql/project/getProjectBudget";
 import { SET_PROJECT_BILLING } from "../../../../graphql/project/setProjectBilling";
 
 const typeOptions = [
@@ -33,6 +34,12 @@ const BillingView = (props: any) => {
     }
   });
 
+  const getBudget = useQuery(GET_PROJECT_BUDGET, {
+    variables: {
+      id: project.id
+    }
+  });
+
   // Billing Edit Area
   const [showEditBilling, setShowEditBilling] = useState(false);
 
@@ -50,6 +57,7 @@ const BillingView = (props: any) => {
 
     if (updated.data.setProjectBilling.success) {
       getBilling.refetch();
+      getBudget.refetch();
       setShowEditBilling(false);
     }
   };
@@ -92,6 +100,7 @@ const BillingView = (props: any) => {
                   className="type-field"
                   name="type"
                   options={typeOptions}
+                  disabled
                 />
               </CombinedInputs>
               <Button type="primary" htmlType="submit">

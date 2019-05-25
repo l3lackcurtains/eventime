@@ -2,6 +2,7 @@ import { Button, Col, Divider, Modal, Row } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import styled from "styled-components";
+import AddEstimateButton from "./addEstimate";
 import AddTimeButton from "./addTimeButton";
 import EditTask from "./editTask";
 import TaskTimerButton from "./taskTimerButton";
@@ -46,6 +47,7 @@ const TaskView = (props: any) => {
               <ActionButton block onClick={() => setShowEditTask(true)}>
                 Edit Task
               </ActionButton>
+              <AddEstimateButton currentTask={currentTask} />
             </Col>
           </Row>
           <Divider />

@@ -23,7 +23,11 @@ import {
   REORDER_TASK_BETWEEN_SECTIONS
 } from "../../../../graphql/project/reorderTask";
 import { DELETE_SECTION } from "../../../../graphql/section/deleteSection";
-import { dragItemsBetweenArray, reorderArray } from "../../../../utils/helpers";
+import {
+  dragItemsBetweenArray,
+  getTaskRecordsTotalHour,
+  reorderArray
+} from "../../../../utils/helpers";
 import BillingView from "./billingView";
 import BudgetView from "./budgetView";
 import CardTimer from "./cardTimer";
@@ -294,11 +298,11 @@ const ProjectView = (props: any) => {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
-                    {section.tasks.map((subTask: any, taskIndex: number) => (
+                    {section.tasks.map((task: any, taskIndex: number) => (
                       <>
                         <Draggable
-                          key={subTask.id}
-                          draggableId={subTask.id}
+                          key={task.id}
+                          draggableId={task.id}
                           index={taskIndex}
                         >
                           {provided => (
@@ -313,12 +317,17 @@ const ProjectView = (props: any) => {
                                   setTaskModalVisible(true);
                                 }}
                               >
-                                <p>{subTask.name}</p>
+                                <p>{task.name}</p>
 
                                 <div className="card-meta">
                                   <div>
-                                    <p>11h 2m of 16h</p>
-                                    <CardTimer task={subTask} />
+                                    <p>
+                                      {getTaskRecordsTotalHour(task)}h{" "}
+                                      {task.estimate
+                                        ? `of ${task.estimate.total}h`
+                                        : null}
+                                    </p>
+                                    <CardTimer task={task} />
                                   </div>
                                   <div>
                                     <Avatar

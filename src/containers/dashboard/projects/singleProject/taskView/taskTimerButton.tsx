@@ -40,7 +40,7 @@ const TaskTimerButtonInner = (props: any) => {
   const [timer, setTimer] = useState(timerDuration);
 
   const [starting, setStarting] = useState(false);
-  const { project } = useContext(ProjectContext);
+  const { project, refetchProject } = useContext(ProjectContext);
 
   const getBudget = useQuery(GET_PROJECT_BUDGET, {
     variables: {
@@ -76,6 +76,7 @@ const TaskTimerButtonInner = (props: any) => {
     setTimerStarted(false);
     refetchTimer();
     getBudget.refetch();
+    refetchProject();
   };
 
   const runningTimer = setInterval(() => {

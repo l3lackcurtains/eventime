@@ -17,12 +17,16 @@ export const GET_PROJECT_BY_SLUG = gql`
             description
             dueAt
             createdAt
+            timerRecords {
+              duration
+              user {
+                email
+              }
+            }
+            estimate {
+              total
+            }
           }
-        }
-        budget {
-          amount
-          type
-          progress
         }
       }
     }

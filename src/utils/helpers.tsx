@@ -65,4 +65,18 @@ const groupedTimerRecords: any = (data: any) => {
   return groupArrays;
 };
 
-export { reorderArray, dragItemsBetweenArray, groupedTimerRecords };
+const getTaskRecordsTotalHour = (task: any) => {
+  if (!task.timerRecords) return 0;
+  const total = task.timerRecords.reduce(
+    (sum: number, tr: any) => sum + parseInt(tr.duration),
+    0
+  );
+  return Math.floor(total / 3600);
+};
+
+export {
+  reorderArray,
+  dragItemsBetweenArray,
+  groupedTimerRecords,
+  getTaskRecordsTotalHour
+};
