@@ -10,10 +10,11 @@ import {
   Tag
 } from "antd";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useMutation } from "react-apollo-hooks";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import * as Yup from "yup";
+import { ProjectContext } from ".";
 import { CustomTextArea } from "../../../../components/fields/formFields";
 import { CREATE_SECTION } from "../../../../graphql/project/createSection";
 import { CREATE_TASK } from "../../../../graphql/project/createTask";
@@ -23,6 +24,7 @@ import {
 } from "../../../../graphql/project/reorderTask";
 import { DELETE_SECTION } from "../../../../graphql/section/deleteSection";
 import { dragItemsBetweenArray, reorderArray } from "../../../../utils/helpers";
+import BillingView from "./billingView";
 import BudgetView from "./budgetView";
 import CardTimer from "./cardTimer";
 import EditProject from "./editProject";
@@ -43,13 +45,19 @@ const CreateTaskSchema = Yup.object().shape({
 });
 
 const ProjectView = (props: any) => {
-  // Edit Project Modal
+  // Get Project Context
+  const { project, refetchProject } = useContext(ProjectContext);
+
+  const projectTasks = project;
+
+  // edit section view
+  const [editSectionView, setEditSectionView] = useState(false);
 
   // Task View Modal
   const [editProjectVisible, setEditProjectVisible] = useState(false);
 
-  // Get projects data
-  const { projectTasks, refetchProject } = props;
+  // Task View Modal
+  const [taskModalVisible, setTaskModalVisible] = useState(false);
 
   // Reorder Tasks API
   const reorderTask = useMutation(REORDER_TASK);
@@ -60,13 +68,6 @@ const ProjectView = (props: any) => {
 
   // Add section
   const createSection = useMutation(CREATE_SECTION);
-
-  // Task View Modal
-  const [taskModalVisible, setTaskModalVisible] = useState(false);
-
-  const toggleTaskView = (state: boolean) => {
-    setTaskModalVisible(state);
-  };
 
   const [currentTask, setCurrentTask] = useState({
     sectionIndex: 0,
@@ -81,6 +82,13 @@ const ProjectView = (props: any) => {
 
   const onShowAddProjectArea = () => {
     setAddProjectAreaButton(false);
+  };
+
+  // Project area create
+  const [taskCardAddSection, setTaskCardAddSection] = useState("");
+
+  const onShowAddTaskCard = (id: string) => {
+    setTaskCardAddSection(id);
   };
 
   // Handle section create
@@ -103,13 +111,6 @@ const ProjectView = (props: any) => {
       setStatus({ success: false });
       setSubmitting(false);
     }
-  };
-
-  // Project area create
-  const [taskCardAddSection, setTaskCardAddSection] = useState("");
-
-  const onShowAddTaskCard = (id: string) => {
-    setTaskCardAddSection(id);
   };
 
   // handle create task
@@ -160,19 +161,9 @@ const ProjectView = (props: any) => {
     });
   };
 
-  // edit section view
-  const [editSectionView, setEditSectionView] = useState(false);
-
-  /**
-   * ********************************
-   * Drag and Drop Logic
-   * @param result
-   * *******************************
-   */
-
+  // Drag and drop Logic
   const onDragCardEnd = async (result: any) => {
     const { source, destination } = result;
-    // dropped outside the
     if (!destination) {
       return;
     }
@@ -250,7 +241,8 @@ const ProjectView = (props: any) => {
           </Dropdown>
         </div>
         <div className="right-actions">
-          <BudgetView project={projectTasks} refetchProject={refetchProject} />
+          <BillingView />
+          <BudgetView />
         </div>
       </CustomHeader>
 
@@ -318,7 +310,7 @@ const ProjectView = (props: any) => {
                               <ProjectCard
                                 onClick={() => {
                                   setCurrentTask({ sectionIndex, taskIndex });
-                                  toggleTaskView(true);
+                                  setTaskModalVisible(true);
                                 }}
                               >
                                 <p>{subTask.name}</p>
@@ -435,8 +427,7 @@ const ProjectView = (props: any) => {
               ]
             }
             taskModalVisible={taskModalVisible}
-            toggleTaskView={toggleTaskView}
-            refetchProject={refetchProject}
+            setTaskModalVisible={setTaskModalVisible}
           />
         ) : null}
 
@@ -451,11 +442,7 @@ const ProjectView = (props: any) => {
           width={700}
           destroyOnClose
         >
-          <EditProject
-            projectId={projectTasks.id}
-            refetchProject={refetchProject}
-            setEditProjectVisible={setEditProjectVisible}
-          />
+          <EditProject setEditProjectVisible={setEditProjectVisible} />
         </Modal>
       </ProjectWrapper>
     </>

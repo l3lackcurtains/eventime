@@ -81,6 +81,26 @@ export const CustomHeader = styled.div`
   .left-actions {
     display: flex;
   }
+
+  .right-actions {
+    display: flex;
+    .billing-section {
+      margin-right: 16px;
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid #f1f1f1;
+      padding: 4px 16px;
+      border-radius: 10px;
+    }
+    .budget-section {
+      cursor: pointer;
+      margin-right: 24px;
+      background: #fff;
+      border: 1px solid #f1f1f1;
+      padding: 4px 16px;
+      border-radius: 10px;
+    }
+  }
   h1 {
     margin-right: 16px;
   }

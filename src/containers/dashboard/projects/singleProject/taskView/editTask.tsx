@@ -1,9 +1,10 @@
 import { Button, Divider, Form, Modal } from "antd";
 import { Formik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
 import { useMutation } from "react-apollo-hooks";
 import styled from "styled-components";
 import * as Yup from "yup";
+import { ProjectContext } from "..";
 import {
   CustomDatePicker,
   CustomTextArea,
@@ -17,11 +18,14 @@ const EditTaskSchema = Yup.object().shape({
 });
 
 const EditTask = (props: any) => {
-  const { setShowEditTask, refetchProject, task, toggleTaskView } = props;
+  const { setShowEditTask, currentTask, setTaskModalVisible } = props;
+
+  const { refetchProject } = useContext(ProjectContext);
+
   const updateTask = useMutation(UPDATE_TASK);
   const deleteTask = useMutation(DELETE_TASK);
 
-  const { name, description, dueAt } = task;
+  const { name, description, dueAt } = currentTask;
   const confirm = Modal.confirm;
   const handleDeleteTask = async (e: any) => {
     e.preventDefault();
@@ -33,14 +37,14 @@ const EditTask = (props: any) => {
       async onOk() {
         const destroy = await deleteTask({
           variables: {
-            id: task.id
+            id: currentTask.id
           }
         });
 
         if (destroy.data.deleteTask) {
           refetchProject();
           setShowEditTask(false);
-          toggleTaskView(false);
+          setTaskModalVisible(false);
         }
       },
       onCancel() {}
@@ -51,7 +55,7 @@ const EditTask = (props: any) => {
     const { name, description, dueAt } = values;
     const update = await updateTask({
       variables: {
-        id: task.id,
+        id: currentTask.id,
         name,
         description,
         dueAt

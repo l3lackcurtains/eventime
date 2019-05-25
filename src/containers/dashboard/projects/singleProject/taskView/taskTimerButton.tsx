@@ -1,8 +1,10 @@
 import { Button } from "antd";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
+import { ProjectContext } from "..";
+import { GET_PROJECT_BUDGET } from "../../../../../graphql/project/getProjectBudget";
 import { GET_TIMER } from "../../../../../graphql/timer/getTimer";
 import { START_TIMER } from "../../../../../graphql/timer/startTimer";
 import { STOP_TIMER } from "../../../../../graphql/timer/stopTimer";
@@ -38,6 +40,13 @@ const TaskTimerButtonInner = (props: any) => {
   const [timer, setTimer] = useState(timerDuration);
 
   const [starting, setStarting] = useState(false);
+  const { project } = useContext(ProjectContext);
+
+  const getBudget = useQuery(GET_PROJECT_BUDGET, {
+    variables: {
+      id: project.id
+    }
+  });
 
   // start Timer
   const startTimer = useMutation(START_TIMER);
@@ -66,6 +75,7 @@ const TaskTimerButtonInner = (props: any) => {
     });
     setTimerStarted(false);
     refetchTimer();
+    getBudget.refetch();
   };
 
   const runningTimer = setInterval(() => {

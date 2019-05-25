@@ -8,12 +8,7 @@ import TaskTimerButton from "./taskTimerButton";
 
 const TaskView = (props: any) => {
   // Task Modal
-  const {
-    taskModalVisible,
-    currentTask,
-    toggleTaskView,
-    refetchProject
-  } = props;
+  const { taskModalVisible, currentTask, setTaskModalVisible } = props;
 
   // Edit Task
   const [showEditTask, setShowEditTask] = useState(false);
@@ -24,9 +19,9 @@ const TaskView = (props: any) => {
     <Modal
       title={currentTask.name}
       visible={taskModalVisible}
-      onOk={() => toggleTaskView(false)}
+      onOk={() => setTaskModalVisible(false)}
       onCancel={() => {
-        toggleTaskView(false);
+        setTaskModalVisible(false);
         setShowEditTask(false);
       }}
       footer={null}
@@ -36,9 +31,8 @@ const TaskView = (props: any) => {
       {showEditTask ? (
         <EditTask
           setShowEditTask={setShowEditTask}
-          toggleTaskView={toggleTaskView}
-          refetchProject={refetchProject}
-          task={currentTask}
+          setTaskModalVisible={setTaskModalVisible}
+          currentTask={currentTask}
         />
       ) : (
         <>

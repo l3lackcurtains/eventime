@@ -1,12 +1,14 @@
 import { Button, Form, Icon, Popover, Progress } from "antd";
 import { Formik } from "formik";
-import React, { useState } from "react";
-import { useMutation } from "react-apollo-hooks";
+import React, { useContext, useState } from "react";
+import { useMutation, useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
+import { ProjectContext } from ".";
 import {
   CustomSelect,
   CustomTextInput
 } from "../../../../components/fields/formFields";
+import { GET_PROJECT_BUDGET } from "../../../../graphql/project/getProjectBudget";
 import { SET_PROJECT_BUDGET } from "../../../../graphql/project/setProjectBudget";
 
 const typeOptions = [
@@ -23,7 +25,14 @@ const typeOptions = [
 ];
 
 const BudgetView = (props: any) => {
-  const { project, refetchProject } = props;
+  const { project } = useContext(ProjectContext);
+
+  const getBudget = useQuery(GET_PROJECT_BUDGET, {
+    variables: {
+      id: project.id
+    }
+  });
+
   // Budget Edit Area
   const [showEditBudget, setShowEditBudget] = useState(false);
 
@@ -40,26 +49,39 @@ const BudgetView = (props: any) => {
     });
 
     if (updated.data.setProjectBudget.success) {
-      refetchProject();
       setShowEditBudget(false);
+      getBudget.refetch();
     }
   };
+
+  if (getBudget.loading) return null;
+
+  const budget = getBudget.data.getProjectBudget.result;
+
   let budgetFormData = {
     amount: 0,
     type: "time"
   };
   let budgetType = "h";
-  if (project.budget) {
+  let amount: number = 0;
+  let progress: number = 0;
+  let percentage: number = 0;
+
+  if (budget) {
     budgetFormData = {
-      amount: project.budget.amount,
-      type: project.budget.type
+      amount: budget.amount,
+      type: budget.type
     };
 
-    budgetType = project.budget.type === "money" ? "$" : "h";
+    budgetType = budget.type === "money" ? "$" : "h";
+    amount = parseInt(budget.amount);
+    progress = parseInt(budget.progress);
+    percentage = Math.floor((progress / amount) * 100);
   }
 
   return (
     <Popover
+      className="budget-section"
       content={
         <Formik
           initialValues={budgetFormData}
@@ -91,13 +113,12 @@ const BudgetView = (props: any) => {
       placement="leftTop"
       onVisibleChange={(visible: boolean) => setShowEditBudget(visible)}
     >
-      {project.budget ? (
+      {getBudget.data.getProjectBudget.success ? (
         <div>
-          <a>
-            {`Budget: 0${budgetType} of ${project.budget.amount}${budgetType}`}
-            <a />
-          </a>
-          <Progress percent={40} strokeColor="green" />
+          <p>{`Budget: ${progress}${budgetType} of ${amount}${budgetType}`}</p>
+          <p>
+            <Progress percent={percentage} strokeColor="green" />
+          </p>
         </div>
       ) : (
         <a className="ant-dropdown-link" href="#">
@@ -111,7 +132,7 @@ const BudgetView = (props: any) => {
 const CombinedInputs = styled.div`
   display: flex;
   .time-field {
-    width: 90px !important;
+    width: 100px !important;
     margin-left: -4px;
     border-radius: 0;
   }

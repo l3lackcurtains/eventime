@@ -1,16 +1,16 @@
 import { Button, Divider, Form } from "antd";
 import { Formik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
 import * as Yup from "yup";
+import { ProjectContext } from ".";
 import {
   CustomMultipleSelect,
   CustomSelect,
   CustomTextInput
 } from "../../../../components/fields/formFields";
 import { GET_CLIENTS } from "../../../../graphql/client/getClients";
-import { GET_PROJECT } from "../../../../graphql/project/getProject";
 import { UPDATE_PROJECT } from "../../../../graphql/project/updateProject";
 import { GET_WORKSPACE_USERS } from "../../../../graphql/user/getWorkspaceUsers";
 
@@ -21,13 +21,8 @@ const updateProjectSchema = Yup.object().shape({
 });
 
 const EditProject = (props: any) => {
-  const { projectId, refetchProject, setEditProjectVisible } = props;
-
-  const getProject = useQuery(GET_PROJECT, {
-    variables: {
-      id: projectId
-    }
-  });
+  const { setEditProjectVisible } = props;
+  const { project, refetchProject } = useContext(ProjectContext);
 
   const getClients = useQuery(GET_CLIENTS);
   const getUsers = useQuery(GET_WORKSPACE_USERS);
@@ -39,7 +34,7 @@ const EditProject = (props: any) => {
 
     const updated = await updateProject({
       variables: {
-        id: projectId,
+        id: project.id,
         name,
         clientId: client,
         users: members
@@ -50,7 +45,6 @@ const EditProject = (props: any) => {
       resetForm();
       refetchProject();
       setEditProjectVisible(false);
-      getProject.refetch();
     }
   };
 
@@ -75,10 +69,6 @@ const EditProject = (props: any) => {
       return user;
     });
   }
-
-  if (getProject.loading) return null;
-
-  const project = getProject.data.getProject.result;
 
   if (clientsData.length === 0) {
     return <p>You must add client first.</p>;

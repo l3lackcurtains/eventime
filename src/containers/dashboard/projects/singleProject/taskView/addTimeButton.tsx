@@ -1,15 +1,17 @@
 import { Button, Form, Popover } from "antd";
 import { Formik } from "formik";
 import moment from "moment";
-import React, { useState } from "react";
-import { useMutation } from "react-apollo-hooks";
+import React, { useContext, useState } from "react";
+import { useMutation, useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
 import * as Yup from "yup";
+import { ProjectContext } from "..";
 import {
   CustomDatePicker,
   CustomTextArea,
   CustomTextInput
 } from "../../../../../components/fields/formFields";
+import { GET_PROJECT_BUDGET } from "../../../../../graphql/project/getProjectBudget";
 import { ADD_TIME_TO_TASK } from "../../../../../graphql/task/addTimeToTask";
 const addTimeSchema = Yup.object().shape({
   date: Yup.string().required("Name is Required"),
@@ -22,6 +24,14 @@ const AddTimeButton = (props: any) => {
   const [showForms, setShowForms] = useState(false);
   const { currentTask } = props;
   const addTime = useMutation(ADD_TIME_TO_TASK);
+
+  const { project } = useContext(ProjectContext);
+
+  const getBudget = useQuery(GET_PROJECT_BUDGET, {
+    variables: {
+      id: project.id
+    }
+  });
 
   const handleAddTime = async (values: any, { resetForm }: any) => {
     const { date, duration, description } = values;
@@ -42,6 +52,7 @@ const AddTimeButton = (props: any) => {
         description: ""
       });
       setShowForms(false);
+      getBudget.refetch();
     }
   };
 
