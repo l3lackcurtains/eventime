@@ -14,8 +14,26 @@ import React from "react";
 import styled from "styled-components";
 
 const CustomTextInput = (props: any) => {
-  const { label, required, colon, extra, validateStatus, ...rest } = props;
+  const {
+    label,
+    required,
+    colon,
+    extra,
+    hideError,
+    validateStatus,
+    ...rest
+  } = props;
   const [field, meta] = useField(props.name);
+  let validationStatus: any = validateStatus || "";
+  let helpText = "";
+
+  if (meta.touched && meta.error) {
+    validationStatus = "error";
+    if (!hideError) {
+      helpText = meta.error;
+    }
+  }
+
   return (
     <>
       <Form.Item
@@ -23,13 +41,11 @@ const CustomTextInput = (props: any) => {
         required={required}
         colon={colon}
         extra={extra}
-        validateStatus={validateStatus}
+        validateStatus={validationStatus}
+        help={helpText}
       >
         <Input {...rest} {...field} />
       </Form.Item>
-      {meta.touched && meta.error ? (
-        <CustomAlert message={meta.error} type="error" />
-      ) : null}
     </>
   );
 };
@@ -245,20 +261,8 @@ const CustomMultipleSelect = (props: any) => {
 };
 
 const CustomCascader = (props: any) => {
-  const {
-    label,
-    required,
-    colon,
-    extra,
-    validateStatus,
-    value,
-    options,
-    ...rest
-  } = props;
+  const { label, required, colon, extra, value, options, ...rest } = props;
   const [field, meta] = useField(props.name);
-  const handleAreaClick = (e: any, label: string, option: object) => {
-    e.stopPropagation();
-  };
   const displayRender = (labels: any, selectedOptions: any) =>
     labels.map((label: any, i: number) => {
       const option = selectedOptions[i];
@@ -269,13 +273,7 @@ const CustomCascader = (props: any) => {
     });
   return (
     <>
-      <Form.Item
-        label={label}
-        required={required}
-        colon={colon}
-        extra={extra}
-        validateStatus={validateStatus}
-      >
+      <Form.Item label={label} required={required} colon={colon} extra={extra}>
         <Field name={field.name}>
           {({ field: { value }, form: { setFieldValue } }: FieldProps) => (
             <Cascader

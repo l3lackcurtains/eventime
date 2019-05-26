@@ -11,6 +11,7 @@ const DashHeader = (props: any) => {
       <Button
         onClick={async () => {
           const result = await doLogout();
+          console.log(result);
           if (result && result.data && result.data.logout) {
             props.history.push("/login");
           }

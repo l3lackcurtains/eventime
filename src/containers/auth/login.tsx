@@ -1,6 +1,6 @@
-import { Button, Form, Icon } from "antd";
+import { Alert, Button, Form, Icon } from "antd";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
 import styled from "styled-components";
 import * as Yup from "yup";
@@ -17,6 +17,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 const Login = (props: any) => {
+  const [loginErrors, setLoginErrors] = useState([]);
   const doLogin = useMutation(LOGIN);
 
   return (
@@ -27,14 +28,24 @@ const Login = (props: any) => {
           validationSchema={LoginSchema}
           onSubmit={async values => {
             const { email, password } = values;
-            const result = await doLogin({
-              variables: {
-                email,
-                password
+            try {
+              const logged = await doLogin({
+                variables: {
+                  email,
+                  password
+                }
+              });
+
+              setLoginErrors([]);
+              if (logged.data.login.success) {
+                props.history.push("/dashboard");
               }
-            });
-            if (result.data.login.success) {
-              props.history.push("/dashboard");
+            } catch (e) {
+              let errors: any = [];
+              e.graphQLErrors.forEach((err: any, index: number) => {
+                errors.push(err.message.split("rror:")[1]);
+              });
+              setLoginErrors(errors);
             }
           }}
           render={(props: any) => (
@@ -52,6 +63,22 @@ const Login = (props: any) => {
                 label="Password"
                 name="password"
               />
+              {loginErrors.length > 0 ? (
+                <Alert
+                  message="Error"
+                  description={
+                    <>
+                      {loginErrors.map((err: string, index: number) => (
+                        <div key={index}>{err}</div>
+                      ))}
+                    </>
+                  }
+                  type="error"
+                  showIcon
+                  closable
+                  onClose={() => setLoginErrors([])}
+                />
+              ) : null}
               <Form.Item>
                 <Button type="primary" htmlType="submit">
                   Log in
