@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import ProtectedRoute from "../utils/components";
 import Login from "./auth/login";
+import Register from "./auth/register";
 import Dashboard from "./dashboard";
 
 function Home() {
@@ -20,6 +21,7 @@ function MainApp() {
         <Route exact path="/" component={Home} />
         <ProtectedRoute path="/dashboard" component={Dashboard} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
       </Switch>
     </Router>
   );

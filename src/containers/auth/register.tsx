@@ -6,57 +6,70 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { CustomTextInput } from "../../components/fields/formFields";
-import { LOGIN } from "../../graphql/user/login";
+import { REGISTER } from "../../graphql/user/register";
 
-const LoginSchema = Yup.object().shape({
+const RegisterSchema = Yup.object().shape({
+  name: Yup.string().required("Name is Required"),
   email: Yup.string()
     .email("Invalid email")
     .required("Email is Required"),
   password: Yup.string()
     .required("Password is required")
-    .min(6, "Password too Short!")
+    .min(6, "Password too Short!"),
+  passwordConfirmation: Yup.string().oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  )
 });
 
-const Login = (props: any) => {
-  const [loginErrors, setLoginErrors] = useState([]);
-  const doLogin = useMutation(LOGIN);
+const Register = (props: any) => {
+  const [registerErrors, setRegisterErrors] = useState([]);
+  const doRegister = useMutation(REGISTER);
 
   return (
     <Wrapper>
       <AuthForm>
         <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={LoginSchema}
+          initialValues={{ email: "", password: "", name: "" }}
+          validationSchema={RegisterSchema}
           onSubmit={async values => {
-            const { email, password } = values;
+            const { email, password, name } = values;
             try {
-              const logged = await doLogin({
+              const registered = await doRegister({
                 variables: {
+                  name,
                   email,
                   password
                 }
               });
 
-              setLoginErrors([]);
-              if (logged.data) {
-                props.history.push("/dashboard");
+              setRegisterErrors([]);
+              if (registered.data) {
+                props.history.push("/login");
               }
             } catch (e) {
               let errors: any = [];
               e.graphQLErrors.forEach((err: any, index: number) => {
                 errors.push(err.message.split("rror:")[1]);
               });
-              setLoginErrors(errors);
+              setRegisterErrors(errors);
             }
           }}
           render={(props: any) => (
             <Form onSubmit={props.handleSubmit}>
               <CustomTextInput
                 prefix={<Icon type="user" />}
+                placeholder="name"
+                label="Name"
+                name="name"
+                size="large"
+              />
+              <CustomTextInput
+                prefix={<Icon type="user" />}
                 placeholder="email"
                 label="Email"
-                name="email"
                 type="email"
+                name="email"
                 size="large"
               />
               <CustomTextInput
@@ -67,13 +80,21 @@ const Login = (props: any) => {
                 name="password"
                 size="large"
               />
+              <CustomTextInput
+                prefix={<Icon type="lock" />}
+                type="password"
+                placeholder="Retype Password"
+                label="Retype Password"
+                name="passwordConfirmation"
+                size="large"
+              />
               <Form.Item>
-                {loginErrors.length > 0 ? (
+                {registerErrors.length > 0 ? (
                   <Alert
                     message="Error"
                     description={
                       <>
-                        {loginErrors.map((err: string, index: number) => (
+                        {registerErrors.map((err: string, index: number) => (
                           <div key={index}>{err}</div>
                         ))}
                       </>
@@ -81,17 +102,17 @@ const Login = (props: any) => {
                     type="error"
                     showIcon
                     closable
-                    onClose={() => setLoginErrors([])}
+                    onClose={() => setRegisterErrors([])}
                   />
                 ) : null}
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  Login
+                  Register
                 </Button>
               </Form.Item>
               <MoreLinks>
-                <NavLink to="/register">Register</NavLink>
+                <NavLink to="/login">Login</NavLink>
               </MoreLinks>
             </Form>
           )}
@@ -112,7 +133,9 @@ const AuthForm = styled.div`
   border: 2px solid #e3e3e3;
   border-radius: 10px;
 `;
+
 const MoreLinks = styled.div`
   margin: 16px 4px;
 `;
-export default Login;
+
+export default Register;

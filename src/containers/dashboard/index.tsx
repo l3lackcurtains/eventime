@@ -41,15 +41,15 @@ const Dashboard = (props: any) => {
         style={{ background: "#fff" }}
         width={250}
       >
-        <div className="logo" style={{ height: 60, padding: 32 }}>
-          LOGO
+        <div className="logo-area">
+          <img src="https://wac-cdn.atlassian.com/dam/jcr:616e6748-ad8c-48d9-ae93-e49019ed5259/Atlassian-horizontal-blue-rgb.svg?cdnVersion=359" />
         </div>
         <DashSideBar />
       </StyledSider>
       <Drawer
         title={
-          <div className="logo" style={{ height: 60, padding: 32 }}>
-            LOGO
+          <div className="logo-area">
+            <img src="https://wac-cdn.atlassian.com/dam/jcr:616e6748-ad8c-48d9-ae93-e49019ed5259/Atlassian-horizontal-blue-rgb.svg?cdnVersion=359" />
           </div>
         }
         placement="left"
@@ -90,9 +90,15 @@ const Dashboard = (props: any) => {
 
 const StyledSider = styled(Sider)`
   background: #fff;
-  .logo {
-    height: 60px;
-    padding: 32px;
+  .logo-area {
+    height: 75px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    img {
+      width: 180px;
+    }
   }
   @media (max-width: 767px) {
     display: none;
