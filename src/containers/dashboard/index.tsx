@@ -42,14 +42,20 @@ const Dashboard = (props: any) => {
         width={250}
       >
         <div className="logo-area">
-          <img src="https://wac-cdn.atlassian.com/dam/jcr:616e6748-ad8c-48d9-ae93-e49019ed5259/Atlassian-horizontal-blue-rgb.svg?cdnVersion=359" />
+          <img
+            alt="logo"
+            src="https://wac-cdn.atlassian.com/dam/jcr:616e6748-ad8c-48d9-ae93-e49019ed5259/Atlassian-horizontal-blue-rgb.svg?cdnVersion=359"
+          />
         </div>
         <DashSideBar />
       </StyledSider>
       <Drawer
         title={
           <div className="logo-area">
-            <img src="https://wac-cdn.atlassian.com/dam/jcr:616e6748-ad8c-48d9-ae93-e49019ed5259/Atlassian-horizontal-blue-rgb.svg?cdnVersion=359" />
+            <img
+              alt="logo"
+              src="https://wac-cdn.atlassian.com/dam/jcr:616e6748-ad8c-48d9-ae93-e49019ed5259/Atlassian-horizontal-blue-rgb.svg?cdnVersion=359"
+            />
           </div>
         }
         placement="left"

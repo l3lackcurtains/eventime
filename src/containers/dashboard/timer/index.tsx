@@ -3,14 +3,10 @@ import moment from "moment";
 import React from "react";
 import { useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
-import * as Yup from "yup";
 import { GET_USER_TIMER_RECORDS } from "../../../graphql/timerRecords/getUserTimerRecords";
 import { groupedTimerRecords } from "../../../utils/helpers";
 import TimerBox from "./timerBox";
 
-const startTimerSchema = Yup.object().shape({
-  task: Yup.string().required("Task is Required")
-});
 const Panel = Collapse.Panel;
 
 const Timer = () => {

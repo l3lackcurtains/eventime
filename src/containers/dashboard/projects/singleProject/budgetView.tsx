@@ -116,9 +116,9 @@ const BudgetView = (props: any) => {
       {getBudget.data.getProjectBudget.success ? (
         <div>
           <p>{`Budget: ${progress}${budgetType} of ${amount}${budgetType}`}</p>
-          <p>
+          <div>
             <Progress percent={percentage} strokeColor="green" />
-          </p>
+          </div>
         </div>
       ) : (
         <a className="ant-dropdown-link" href="#">

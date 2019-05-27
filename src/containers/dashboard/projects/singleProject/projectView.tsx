@@ -253,7 +253,7 @@ const ProjectView = (props: any) => {
       <ProjectWrapper>
         <DragDropContext onDragEnd={res => onDragCardEnd(res)}>
           {projectTasks.sections.map((section: any, sectionIndex: any) => (
-            <ProjectArea>
+            <ProjectArea key={section.id}>
               <TaskDropdown
                 overlay={
                   <>
@@ -283,12 +283,12 @@ const ProjectView = (props: any) => {
                 }
                 trigger={["click"]}
               >
-                <p className="ant-dropdown-link">
+                <div className="ant-dropdown-link">
                   <span>{section.name}</span>
                   <span>
                     <Tag color="magenta">4</Tag> <Icon type="down" />
                   </span>
-                </p>
+                </div>
               </TaskDropdown>
               <p>11h 35m</p>
 
@@ -299,7 +299,7 @@ const ProjectView = (props: any) => {
                     ref={provided.innerRef}
                   >
                     {section.tasks.map((task: any, taskIndex: number) => (
-                      <>
+                      <div key={task.id}>
                         <Draggable
                           key={task.id}
                           draggableId={task.id}
@@ -320,15 +320,13 @@ const ProjectView = (props: any) => {
                                 <p>{task.name}</p>
 
                                 <div className="card-meta">
-                                  <div>
-                                    <p>
-                                      {getTaskRecordsTotalHour(task)}h{" "}
-                                      {task.estimate
-                                        ? `of ${task.estimate.total}h`
-                                        : null}
-                                    </p>
-                                    <CardTimer task={task} />
-                                  </div>
+                                  <p>
+                                    {getTaskRecordsTotalHour(task)}h{" "}
+                                    {task.estimate
+                                      ? `of ${task.estimate.total}h`
+                                      : null}
+                                  </p>
+                                  <CardTimer task={task} />
                                   <div>
                                     <Avatar
                                       size="small"
@@ -347,7 +345,7 @@ const ProjectView = (props: any) => {
                             </div>
                           )}
                         </Draggable>
-                      </>
+                      </div>
                     ))}
 
                     {taskCardAddSection === section.id ? (

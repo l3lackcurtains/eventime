@@ -13,7 +13,7 @@ const TaskTimerButton = (props: any) => {
   const { currentTask } = props;
   // Get current Timer
   const { data, error, loading, refetch } = useQuery(GET_TIMER);
-  if (loading) return null;
+  if (loading || error) return null;
   const isTimerStarted = data.getTimer.result
     ? data.getTimer.result.task.id === currentTask.id
     : false;
