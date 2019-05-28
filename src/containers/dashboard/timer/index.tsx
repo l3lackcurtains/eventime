@@ -22,8 +22,6 @@ const Timer = () => {
 
   const formattedTmerRecords = groupedTimerRecords(timerRecords);
 
-  console.log(formattedTmerRecords);
-
   return (
     <div>
       <Row>

@@ -27,7 +27,7 @@ const Reports = (props: any) => {
       path = "";
     }
     // @ts-ignore
-    props.history.push(`/reports/${path}`);
+    props.history.push(`/dashboard/reports/${path}`);
   };
 
   return (
@@ -48,9 +48,9 @@ const Reports = (props: any) => {
         }
       >
         <Switch>
-          <Route path={`/reports`} exact component={Summary} />
-          <Route path={`/reports/detailed`} component={Detailed} />
-          <Route path={`/reports/timesheet`} component={Timesheet} />
+          <Route path={`/dashboard/reports`} exact component={Summary} />
+          <Route path={`/dashboard/reports/detailed`} component={Detailed} />
+          <Route path={`/dashboard/reports/timesheet`} component={Timesheet} />
         </Switch>
       </Card>
     </>
