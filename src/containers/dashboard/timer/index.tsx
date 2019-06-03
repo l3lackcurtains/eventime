@@ -11,7 +11,7 @@ const Panel = Collapse.Panel;
 
 const Timer = () => {
   const getTimerRecords = useQuery(GET_USER_TIMER_RECORDS);
-  if (!!getTimerRecords.error) {
+  if (getTimerRecords.error) {
     return <div>No Timer Records</div>;
   }
 

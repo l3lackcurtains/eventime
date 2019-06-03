@@ -8,7 +8,7 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
-    width: "60%"
+    width: "80%"
   },
   {
     title: "Duration",
