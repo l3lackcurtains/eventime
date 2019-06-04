@@ -2,7 +2,6 @@ import { Card, Radio } from "antd";
 import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import Detailed from "./detailed";
 import Filters from "./filters";
 import Summary from "./summary";
 import Timesheet from "./timesheet";
@@ -40,7 +39,6 @@ const Reports = (props: any) => {
             </StyledCardTitle>
             <Radio.Group value={reportType} onChange={onReportTypeChange}>
               <Radio.Button value="summary">Summary</Radio.Button>
-              <Radio.Button value="detailed">Detailed</Radio.Button>
               <Radio.Button value="timesheet">Timesheet</Radio.Button>
             </Radio.Group>
             <Filters />
@@ -49,7 +47,6 @@ const Reports = (props: any) => {
       >
         <Switch>
           <Route path={`/dashboard/reports`} exact component={Summary} />
-          <Route path={`/dashboard/reports/detailed`} component={Detailed} />
           <Route path={`/dashboard/reports/timesheet`} component={Timesheet} />
         </Switch>
       </Card>

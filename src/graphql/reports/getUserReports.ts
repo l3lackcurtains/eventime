@@ -6,6 +6,11 @@ export const GET_REPORTS_BY_MEMBER = gql`
       uid
       name
       totalDuration
+      tasks {
+        tid
+        totalDuration
+        name
+      }
     }
   }
 `;
