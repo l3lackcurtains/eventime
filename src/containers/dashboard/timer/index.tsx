@@ -11,6 +11,7 @@ const Panel = Collapse.Panel;
 
 const Timer = () => {
   const getTimerRecords = useQuery(GET_USER_TIMER_RECORDS);
+  console.log(getTimerRecords);
   if (getTimerRecords.error) {
     return <div>No Timer Records</div>;
   }
@@ -28,68 +29,77 @@ const Timer = () => {
         <Card
           title={<TimerBox refetchTimerRecords={getTimerRecords.refetch} />}
         >
-          {formattedTmerRecords.map((timerRecord: any) => (
-            <>
-              <DateTitle>
-                <h3>{moment(timerRecord.date).fromNow()}</h3>
-                <p>{moment(timerRecord.date).format("LL")}</p>
-              </DateTitle>
-              <List
-                itemLayout="horizontal"
-                dataSource={timerRecord.dateRecords}
-                renderItem={(item: any) => (
-                  <List.Item style={{ margin: "24px 0" }}>
-                    <Row gutter={36} type="flex" justify="space-between">
-                      <Col>
-                        <div style={{ width: 100 }}>
-                          <Icon
-                            type="clock-circle"
-                            style={{ fontSize: 24, margin: "4px 16px" }}
-                          />
-                          <p>
-                            {moment
-                              .utc(item.totalDuration * 1000)
-                              .format("HH:mm:ss")}
-                          </p>
-                        </div>
-                      </Col>
-                      <Col>
-                        <h3>{item.task}</h3>
-                        <StyledCollapse
-                          bordered={false}
-                          defaultActiveKey={["0"]}
-                          expandIcon={({ isActive }) => (
-                            <Icon
-                              type="caret-right"
-                              rotate={isActive ? 90 : 0}
-                            />
-                          )}
-                        >
-                          <StyledPanel header={<span>History</span>} key="1">
-                            {item.taskRecords.map((taskRecord: any) => (
-                              <RecordHistory>
-                                <p>
-                                  <Tag color="magenta">{taskRecord.type}</Tag>
-                                  {taskRecord.startedAt
-                                    ? moment(taskRecord.startedAt).format("LLL")
-                                    : moment(taskRecord.date).format("LL")}
-                                </p>
-                                <p className="timer-duration">
-                                  {moment
-                                    .utc(taskRecord.duration * 1000)
-                                    .format("HH:mm:ss")}
-                                </p>
-                              </RecordHistory>
-                            ))}
-                          </StyledPanel>
-                        </StyledCollapse>
-                      </Col>
-                    </Row>
-                  </List.Item>
-                )}
-              />
-            </>
-          ))}
+          {formattedTmerRecords.length > 0
+            ? formattedTmerRecords.map((timerRecord: any) => (
+                <>
+                  <DateTitle>
+                    <h3>{moment(timerRecord.date).fromNow()}</h3>
+                    <p>{moment(timerRecord.date).format("LL")}</p>
+                  </DateTitle>
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={timerRecord.dateRecords}
+                    renderItem={(item: any) => (
+                      <List.Item style={{ margin: "24px 0" }}>
+                        <Row gutter={36} type="flex" justify="space-between">
+                          <Col>
+                            <div style={{ width: 100 }}>
+                              <Icon
+                                type="clock-circle"
+                                style={{ fontSize: 24, margin: "4px 16px" }}
+                              />
+                              <p>
+                                {moment
+                                  .utc(item.totalDuration * 1000)
+                                  .format("HH:mm:ss")}
+                              </p>
+                            </div>
+                          </Col>
+                          <Col>
+                            <h3>{item.task}</h3>
+                            <StyledCollapse
+                              bordered={false}
+                              defaultActiveKey={["0"]}
+                              expandIcon={({ isActive }) => (
+                                <Icon
+                                  type="caret-right"
+                                  rotate={isActive ? 90 : 0}
+                                />
+                              )}
+                            >
+                              <StyledPanel
+                                header={<span>History</span>}
+                                key="1"
+                              >
+                                {item.taskRecords.map((taskRecord: any) => (
+                                  <RecordHistory>
+                                    <p>
+                                      <Tag color="magenta">
+                                        {taskRecord.type}
+                                      </Tag>
+                                      {taskRecord.startedAt
+                                        ? moment(taskRecord.startedAt).format(
+                                            "LLL"
+                                          )
+                                        : moment(taskRecord.date).format("LL")}
+                                    </p>
+                                    <p className="timer-duration">
+                                      {moment
+                                        .utc(taskRecord.duration * 1000)
+                                        .format("HH:mm:ss")}
+                                    </p>
+                                  </RecordHistory>
+                                ))}
+                              </StyledPanel>
+                            </StyledCollapse>
+                          </Col>
+                        </Row>
+                      </List.Item>
+                    )}
+                  />
+                </>
+              ))
+            : "No Timer Records."}
         </Card>
       </Row>
     </div>

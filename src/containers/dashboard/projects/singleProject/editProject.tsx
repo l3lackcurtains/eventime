@@ -61,7 +61,7 @@ const EditProject = (props: any) => {
 
   let usersData: any[] = [];
   if (!getUsers.loading && !getUsers.error) {
-    const users = getUsers.data.getWorkshopUsers.results;
+    const users = getUsers.data.getWorkshopUsers;
     usersData = users.map((user: any) => {
       user.key = user.id;
       user.value = user.id;

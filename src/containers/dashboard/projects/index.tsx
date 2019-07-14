@@ -64,7 +64,8 @@ const Projects = () => {
     project.key = project.id;
     return project;
   });
-  // TODO: Show starting point to create project, if no projects exist
+
+  // TODO: create entry point for creating project. If no projects exist.
 
   return (
     <>

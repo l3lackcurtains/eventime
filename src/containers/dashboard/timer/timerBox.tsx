@@ -63,6 +63,8 @@ const TimerBox = (props: any) => {
     }
   }
 
+  if (projectsData.length === 0) return null;
+
   return (
     <Formik
       initialValues={{}}
