@@ -2,14 +2,10 @@ import { Card, Radio } from "antd";
 import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import Filters from "./filters";
 import Summary from "./summary";
 import Timesheet from "./timesheet";
 
 const Reports = (props: any) => {
-  /**
-   * Report Type
-   */
   let currentReportType = "summary";
   const currentPath = props.history.location.pathname;
   if (currentPath.includes("detailed")) {
@@ -41,7 +37,6 @@ const Reports = (props: any) => {
               <Radio.Button value="summary">Summary</Radio.Button>
               <Radio.Button value="timesheet">Timesheet</Radio.Button>
             </Radio.Group>
-            <Filters />
           </>
         }
       >
