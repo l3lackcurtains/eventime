@@ -1,6 +1,9 @@
 import { Button, Card, Col, Dropdown, Menu, Modal, Row, Table } from "antd";
+import moment from "moment";
 import React, { useState } from "react";
+import { useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
+import { GET_EXPENSES } from "../../../graphql/expenses/getExpenses";
 import AddExpense from "./addExpenses";
 import ExpenseChart from "./expenseChart";
 
@@ -13,15 +16,23 @@ const menu = (
 const columns = [
   {
     title: "Expense",
-    dataIndex: "expense"
+    dataIndex: "category",
+    render: (text: any, record: any) => {
+      return (
+        <ExpenseDetail>
+          <p>{text}</p>
+          <span>{record.details}</span>
+        </ExpenseDetail>
+      );
+    }
   },
   {
-    title: "Expense",
-    dataIndex: "project"
+    title: "Project",
+    dataIndex: "projectName"
   },
   {
     title: "Member",
-    dataIndex: "member"
+    dataIndex: "userEmail"
   },
   {
     title: "Date",
@@ -30,32 +41,6 @@ const columns = [
   {
     title: "Amount",
     dataIndex: "amount"
-  }
-];
-const data = [
-  {
-    key: "1",
-    expense: "Entertainment - While working on the project",
-    project: "Time Management App",
-    member: "Madhav Poudel",
-    date: "May 2",
-    amount: 10000
-  },
-  {
-    key: "2",
-    expense: "Transportation - Moving from x to y",
-    project: "Evenhour project",
-    member: "Umesh Subedi",
-    date: "May 1",
-    amount: 2000
-  },
-  {
-    key: "3",
-    expense: "Services - Website Maintainence",
-    project: "Time Management App",
-    member: "Madan Poudel",
-    date: "April 12",
-    amount: 16000
   }
 ];
 
@@ -101,9 +86,6 @@ const pieChartData = [
 ];
 
 const Expenses = () => {
-  /**
-   * Table Rows Selection
-   */
   const [selectedRowKeys, setSelectedRowKey] = useState([]);
 
   const onTableRowSelection = (selKeys: any) => {
@@ -117,17 +99,28 @@ const Expenses = () => {
 
   const hasSelected = selectedRowKeys.length > 0;
 
-  /**
-   * Create Expense Modal
-   */
-
   const [createExpenseModalVisible, setCreateExpenseModalVisible] = useState(
     false
   );
 
+  const getExpenses = useQuery(GET_EXPENSES);
+
   const onChangeExpenseModalState = (state: boolean) => {
     setCreateExpenseModalVisible(state);
   };
+
+  let expensesData: any = [];
+  if (!getExpenses.loading && !getExpenses.error) {
+    expensesData = getExpenses.data.getExpenses;
+
+    expensesData.map((expense: any) => {
+      expense.key = expense.id;
+      expense.date = moment(expense.date).fromNow();
+      expense.projectName = expense.project.name;
+      expense.userEmail = expense.user.email;
+      return expense;
+    });
+  }
 
   return (
     <div>
@@ -174,7 +167,7 @@ const Expenses = () => {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={expensesData}
         />
       </Card>
 
@@ -182,10 +175,11 @@ const Expenses = () => {
         title="Add a new Expense"
         style={{ top: 20 }}
         visible={createExpenseModalVisible}
+        footer={null}
         onOk={() => onChangeExpenseModalState(false)}
         onCancel={() => onChangeExpenseModalState(false)}
       >
-        <AddExpense />
+        <AddExpense onChangeExpenseModalState={onChangeExpenseModalState} />
       </Modal>
     </div>
   );
@@ -203,6 +197,16 @@ const StyledCardTitle = styled.div`
 
 const StyledAboveTable = styled.div`
   margin: 24px 0;
+`;
+
+const ExpenseDetail = styled.div`
+  span {
+    font-size: 11px;
+    color: #777;
+  }
+  p {
+    margin: 4px 0;
+  }
 `;
 
 export default Expenses;

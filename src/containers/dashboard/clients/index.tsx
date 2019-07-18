@@ -56,6 +56,7 @@ const Clients = () => {
     client.key = client.id;
     return client;
   });
+
   return (
     <div>
       <Card

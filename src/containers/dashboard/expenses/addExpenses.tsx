@@ -1,36 +1,88 @@
-import {
-  Button,
-  Col,
-  DatePicker,
-  Form,
-  Icon,
-  Input,
-  Row,
-  Select,
-  Upload
-} from "antd";
+import { Button, Col, Form, Icon, Input, Row, Select, Upload } from "antd";
+import { Formik } from "formik";
 import React, { useState } from "react";
+import { useMutation, useQuery } from "react-apollo-hooks";
+import styled from "styled-components";
+import * as Yup from "yup";
+import {
+  CustomDatePicker,
+  CustomSelect,
+  CustomTextArea,
+  CustomTextInput
+} from "../../../components/fields/formFields";
+import { CREATE_EXPENSE } from "../../../graphql/expenses/createExpense";
+import { GET_PROJECTS } from "../../../graphql/project/getProjects";
+import { GET_WORKSPACE_USERS } from "../../../graphql/user/getWorkspaceUsers";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const children: any[] = [];
-for (let i = 10; i < 36; i++) {
-  children.push(
-    <Select.Option key={i.toString(36) + i}>{i.toString(36) + i}</Select.Option>
-  );
-}
+const createExpenseSchema = Yup.object().shape({
+  category: Yup.string().required("Category is Required"),
+  details: Yup.string().required("Details is required"),
+  user: Yup.string().required("Member is required."),
+  project: Yup.string().required("Project is required.")
+});
 
-function onChange(date: any, dateString: string) {
-  console.log(date, dateString);
-}
+const categoryData = [
+  {
+    key: 1,
+    value: "transportation",
+    text: "Transportation"
+  },
+  {
+    key: 2,
+    value: "infrastracture",
+    text: "Infrastracture"
+  },
+  {
+    key: 3,
+    value: "officeNeed",
+    text: "Office needs"
+  },
+  {
+    key: 4,
+    value: "service",
+    text: "Service"
+  },
+  {
+    key: 5,
+    value: "others",
+    text: "Others"
+  }
+];
 
-function onSelectChange(value: any) {
-  console.log(`selected ${value}`);
-}
-
-const AddExpense = () => {
+const AddExpense = (props: any) => {
+  const { onChangeExpenseModalState } = props;
   const [fileList, setFileList] = useState([]);
+
+  const getUsers = useQuery(GET_WORKSPACE_USERS);
+
+  const getProjects = useQuery(GET_PROJECTS);
+
+  let usersData: any[] = [];
+  if (!getUsers.loading && !getUsers.error) {
+    const users = getUsers.data.getWorkshopUsers;
+    usersData = users.map((user: any) => {
+      user.key = user.id;
+      user.value = user.id;
+      user.text = user.email;
+      return user;
+    });
+  }
+
+  let projectsData: any[] = [];
+  if (!getProjects.loading && !getProjects.error) {
+    const projects = getProjects.data.getProjects.results;
+    projectsData = projects.map((project: any) => {
+      project.key = project.id;
+      project.value = project.id;
+      project.text = project.name;
+      return project;
+    });
+  }
+
+  const createExpense = useMutation(CREATE_EXPENSE);
   function handleFileChange(info: any) {
     let fileList: any = [...info.fileList];
     fileList = fileList.slice(-2);
@@ -44,96 +96,109 @@ const AddExpense = () => {
     setFileList(fileList);
     return null;
   }
+
+  const handleCreateExpense = async (values: any, { resetForm }: any) => {
+    const { category, date, amount, project, user, details } = values;
+
+    const created = await createExpense({
+      variables: {
+        category,
+        date,
+        amount,
+        projectId: project,
+        userId: user,
+        details
+      }
+    });
+
+    if (created.data.createExpense) {
+      resetForm();
+      onChangeExpenseModalState(false);
+    }
+  };
+
   return (
     <section>
-      <Form layout="vertical">
-        <Form.Item label="Category">
-          <Select
-            showSearch
-            size="large"
-            placeholder="Select a Category"
-            optionFilterProp="children"
-            onChange={onSelectChange}
-            filterOption={(input, option: any) =>
-              option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            <Option value="transportation">Transportation</Option>
-            <Option value="infrastracture">Infrastracture</Option>
-            <Option value="meals">Meals</Option>
-            <Option value="office-needs">Office Needs</Option>
-            <Option value="services">Services</Option>
-            <Option value="entertainment">Entertainment</Option>
-            <Option value="others">Others</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label="Description">
-          <TextArea placeholder="Description of expense" rows={4} />
-        </Form.Item>
-        <Row type="flex" gutter={16}>
-          <Col xs={12}>
-            <Form.Item label="Amount">
-              <Input size="large" placeholder="Expense Amount" type="number" />
+      <Formik
+        initialValues={{}}
+        validationSchema={createExpenseSchema}
+        onSubmit={handleCreateExpense}
+        render={(props: any) => (
+          <Form layout="vertical" onSubmit={props.handleSubmit}>
+            <CustomSelect
+              label="Category"
+              size="large"
+              placeholder="Select a Category"
+              name="category"
+              options={categoryData}
+            />
+            <CustomTextArea
+              label="Details"
+              size="large"
+              placeholder="Details of expense"
+              name="details"
+              rows={5}
+            />
+            <Row type="flex" gutter={16}>
+              <Col xs={12}>
+                <CustomTextInput
+                  label="Expense Amount"
+                  name="amount"
+                  size="large"
+                  placeholder="Expense Amount"
+                  type="number"
+                />
+              </Col>
+              <Col xs={12}>
+                <CustomDatePicker
+                  size="large"
+                  label="Date"
+                  placeholder="Date"
+                  name="date"
+                />
+              </Col>
+            </Row>
+            <Form.Item>
+              <Upload onChange={handleFileChange} multiple fileList={fileList}>
+                <Button>
+                  <Icon type="upload" /> Attachments
+                </Button>
+              </Upload>
             </Form.Item>
-          </Col>
-          <Col xs={12}>
-            <Form.Item label="Date">
-              <DatePicker size="large" onChange={onChange} />
+            <Row type="flex" gutter={16}>
+              <Col xs={12}>
+                <CustomSelect
+                  label="Project"
+                  size="large"
+                  placeholder="Select a Project"
+                  name="project"
+                  options={projectsData}
+                />
+              </Col>
+              <Col xs={12}>
+                <CustomSelect
+                  label="Member"
+                  size="large"
+                  placeholder="Select a Member"
+                  name="user"
+                  options={usersData}
+                />
+              </Col>
+            </Row>
+            <Form.Item>
+              <ActionButton type="primary" htmlType="submit">
+                Create Expense
+              </ActionButton>
             </Form.Item>
-          </Col>
-        </Row>
-        <Form.Item>
-          <Upload onChange={handleFileChange} multiple fileList={fileList}>
-            <Button>
-              <Icon type="upload" /> Upload
-            </Button>
-          </Upload>
-        </Form.Item>
-        <Row type="flex" gutter={16}>
-          <Col xs={12}>
-            <Form.Item label="Project">
-              <Select
-                showSearch
-                size="large"
-                placeholder="Select a Project"
-                optionFilterProp="children"
-                onChange={onSelectChange}
-                filterOption={(input, option: any) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                <Option value="project1">Project 1</Option>
-                <Option value="project2">Project 2</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={12}>
-            <Form.Item label="Member">
-              <Select
-                showSearch
-                size="large"
-                placeholder="Select a Member"
-                optionFilterProp="children"
-                onChange={onSelectChange}
-                filterOption={(input, option: any) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
-              >
-                <Option value="member1">Member 1</Option>
-                <Option value="member2">Member 2</Option>
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
+          </Form>
+        )}
+      />
     </section>
   );
 };
+
+const ActionButton = styled(Button)`
+  margin-right: 16px;
+`;
 
 export default AddExpense;
