@@ -2,7 +2,6 @@ import { Button, Divider, Form } from "antd";
 import { Formik } from "formik";
 import React from "react";
 import { useMutation } from "react-apollo-hooks";
-import styled from "styled-components";
 import * as Yup from "yup";
 import {
   CustomTextArea,
@@ -54,18 +53,14 @@ const CreateClient = (props: any) => {
           />
           <Divider />
           <Form.Item>
-            <ActionButton type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit">
               Create Client
-            </ActionButton>
+            </Button>
           </Form.Item>
         </Form>
       )}
     />
   );
 };
-
-const ActionButton = styled(Button)`
-  margin-right: 16px;
-`;
 
 export default CreateClient;
