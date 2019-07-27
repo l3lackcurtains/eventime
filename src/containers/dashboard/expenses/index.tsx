@@ -3,7 +3,10 @@ import moment from "moment";
 import React, { useState } from "react";
 import { useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
-import { GET_EXPENSES } from "../../../graphql/expenses/getExpenses";
+import {
+  GET_EXPENSES,
+  GET_EXPENSE_STATS
+} from "../../../graphql/expenses/getExpenses";
 import AddExpense from "./addExpenses";
 import ExpenseChart from "./expenseChart";
 
@@ -51,37 +54,11 @@ const pieChartColumns = [
   },
   {
     title: "Amount",
-    dataIndex: "amount"
+    dataIndex: "total"
   },
   {
     title: "Percentage",
     dataIndex: "percentage"
-  }
-];
-const pieChartData = [
-  {
-    key: "1",
-    category: "Entertainment ",
-    amount: 23000,
-    percentage: `33%`
-  },
-  {
-    key: "1",
-    category: "Transportation ",
-    amount: 18000,
-    percentage: `25%`
-  },
-  {
-    key: "1",
-    category: "Infrastructure ",
-    amount: 18000,
-    percentage: `25%`
-  },
-  {
-    key: "1",
-    category: "Others ",
-    amount: 12000,
-    percentage: `17%`
   }
 ];
 
@@ -105,6 +82,8 @@ const Expenses = () => {
 
   const getExpenses = useQuery(GET_EXPENSES);
 
+  const getExpenseStats = useQuery(GET_EXPENSE_STATS);
+
   const onChangeExpenseModalState = (state: boolean) => {
     setCreateExpenseModalVisible(state);
   };
@@ -121,6 +100,10 @@ const Expenses = () => {
       return expense;
     });
   }
+
+  const expenseStatsData = !getExpenseStats.loading
+    ? getExpenseStats.data.getGroupedExpensesStat.categoryStat
+    : null;
 
   return (
     <div>
@@ -141,12 +124,12 @@ const Expenses = () => {
       >
         <Row>
           <Col sm={12}>
-            <ExpenseChart />
+            <ExpenseChart expenseStatsData={expenseStatsData} />
           </Col>
           <Col sm={12}>
             <Table
               columns={pieChartColumns}
-              dataSource={pieChartData}
+              dataSource={expenseStatsData}
               pagination={false}
               size="small"
             />

@@ -29,3 +29,16 @@ export const GET_EXPENSE = gql`
     }
   }
 `;
+
+export const GET_EXPENSE_STATS = gql`
+  query getGroupedExpensesStat {
+    getGroupedExpensesStat {
+      total
+      categoryStat {
+        total
+        category
+        percentage
+      }
+    }
+  }
+`;

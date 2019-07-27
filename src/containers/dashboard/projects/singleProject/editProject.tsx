@@ -50,7 +50,7 @@ const EditProject = (props: any) => {
 
   let clientsData: any[] = [];
   if (!getClients.loading && !getClients.error) {
-    const clients = getClients.data.getClients.results;
+    const clients = getClients.data.getClients;
     clientsData = clients.map((client: any) => {
       client.key = client.id;
       client.value = client.id;
@@ -78,11 +78,13 @@ const EditProject = (props: any) => {
     <Formik
       initialValues={{
         name: project.name,
-        client: project.client.id,
-        members: project.users.reduce((groups: any, u: any) => {
-          groups.push(u.id);
-          return groups;
-        }, [])
+        client: project.client && project.client.id,
+        members:
+          project.users &&
+          project.users.reduce((groups: any, u: any) => {
+            groups.push(u.id);
+            return groups;
+          }, [])
       }}
       validationSchema={updateProjectSchema}
       onSubmit={handleUpdateProject}

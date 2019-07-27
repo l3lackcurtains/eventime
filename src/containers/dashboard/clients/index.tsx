@@ -20,10 +20,8 @@ const columns = [
 ];
 
 const Clients = () => {
-  // Get all clients
-  const { data, error, loading, refetch } = useQuery(GET_CLIENTS);
+  const getClients = useQuery(GET_CLIENTS);
 
-  // Table Rows Selection
   const [selectedRowKeys, setSelectedRowKey] = useState([]);
 
   const onTableRowSelection = (selKeys: any) => {
@@ -46,12 +44,13 @@ const Clients = () => {
     setCreateClientModalVisible(state);
   };
 
-  if (loading) return null;
-  if (!!error) {
+  console.log(getClients);
+  if (getClients.loading) return null;
+  if (getClients.error) {
     return <div>Error loading client..</div>;
   }
 
-  const clientsData = data.getClients.results;
+  const clientsData = getClients.data.getClients;
   clientsData.map((client: any) => {
     client.key = client.id;
     return client;
@@ -105,7 +104,7 @@ const Clients = () => {
       >
         <CreateClient
           onChangeClientModalState={onChangeClientModalState}
-          refetchClients={refetch}
+          refetchClients={getClients.refetch}
         />
       </Modal>
     </div>

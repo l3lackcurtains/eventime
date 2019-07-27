@@ -1,13 +1,6 @@
 import React from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 }
-];
-
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const RADIAN = Math.PI / 180;
@@ -30,7 +23,18 @@ const renderCustomizedLabel = (props: any) => {
   );
 };
 
-const ExpenseChart = () => {
+const ExpenseChart = (props: any) => {
+  const { expenseStatsData } = props;
+  if (!expenseStatsData) return null;
+
+  expenseStatsData.map((expenseStat: any, index: number) => {
+    expenseStat.name = expenseStat.category;
+    return expenseStat;
+  });
+
+  const data = expenseStatsData.filter(
+    (expenseStat: any) => expenseStat.percentage !== 0
+  );
   return (
     <ResponsiveContainer width="100%" height={200}>
       <PieChart>
@@ -40,7 +44,7 @@ const ExpenseChart = () => {
           label={renderCustomizedLabel}
           outerRadius={100}
           fill="#8884d8"
-          dataKey="value"
+          dataKey="percentage"
         >
           {data.map((entry: any, index: number) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
