@@ -5,7 +5,7 @@ import "./App.less";
 import MainApp from "./containers";
 
 const client = new ApolloClient({
-  uri: "http://localhost:8000/graphql",
+  uri: "http://165.22.219.65:8000/graphql",
   credentials: "include",
   cache: new InMemoryCache()
 });
