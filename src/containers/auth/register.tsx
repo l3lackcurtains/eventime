@@ -17,7 +17,7 @@ const RegisterSchema = Yup.object().shape({
     .required("Password is required")
     .min(6, "Password too Short!"),
   passwordConfirmation: Yup.string().oneOf(
-    [Yup.ref("password"), null],
+    [Yup.ref("password"), ""],
     "Passwords must match"
   )
 });
