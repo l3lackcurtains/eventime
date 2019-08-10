@@ -44,7 +44,6 @@ const Clients = () => {
     setCreateClientModalVisible(state);
   };
 
-  console.log(getClients);
   if (getClients.loading) return null;
   if (getClients.error) {
     return <div>Error loading client..</div>;

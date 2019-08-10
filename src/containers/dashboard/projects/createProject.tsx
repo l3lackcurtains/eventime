@@ -46,7 +46,7 @@ const CreateProject = (props: any) => {
   };
   let clientsData: any[] = [];
   if (!getClients.loading && !getClients.error) {
-    const clients = getClients.data.getClients.results;
+    const clients = getClients.data.getClients;
     clientsData = clients.map((client: any) => {
       client.key = client.id;
       client.value = client.id;

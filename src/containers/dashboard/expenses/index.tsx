@@ -162,7 +162,11 @@ const Expenses = () => {
         onOk={() => onChangeExpenseModalState(false)}
         onCancel={() => onChangeExpenseModalState(false)}
       >
-        <AddExpense onChangeExpenseModalState={onChangeExpenseModalState} />
+        <AddExpense
+          onChangeExpenseModalState={onChangeExpenseModalState}
+          refetchExpenses={getExpenses.refetch}
+          refetchExpensesStats={getExpenseStats.refetch}
+        />
       </Modal>
     </div>
   );

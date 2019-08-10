@@ -53,7 +53,11 @@ const categoryData = [
 ];
 
 const AddExpense = (props: any) => {
-  const { onChangeExpenseModalState } = props;
+  const {
+    onChangeExpenseModalState,
+    refetchExpenses,
+    refetchExpensesStats
+  } = props;
   const [fileList, setFileList] = useState([]);
 
   const getUsers = useQuery(GET_WORKSPACE_USERS);
@@ -114,6 +118,8 @@ const AddExpense = (props: any) => {
     if (created.data.createExpense) {
       resetForm();
       onChangeExpenseModalState(false);
+      refetchExpenses();
+      refetchExpensesStats();
     }
   };
 
