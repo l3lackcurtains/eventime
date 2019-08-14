@@ -1,7 +1,6 @@
-import React, { Component } from "react";
-
-import { Row, Col, Popover, Button, DatePicker } from "antd";
+import { Button, Col, DatePicker, Popover, Row } from "antd";
 import moment from "moment";
+import React, { Component } from "react";
 
 const RangePicker = DatePicker.RangePicker;
 
@@ -13,8 +12,7 @@ const userContents = (
 );
 
 function onChange(dates: any, dateStrings: any) {
-  console.log("From: ", dates[0], ", to: ", dates[1]);
-  console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+  //
 }
 class Filters extends Component {
   render() {

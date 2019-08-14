@@ -13,14 +13,14 @@ const CreateInvoice = () => {
   }
 
   function onChange(date: any, dateString: any) {
-    console.log(date, dateString);
+    //
   }
   function handleChange(value: any) {
-    console.log(`selected ${value}`);
+    //
   }
 
   function onSelectChange(value: any) {
-    console.log(`selected ${value}`);
+    //
   }
 
   return (
