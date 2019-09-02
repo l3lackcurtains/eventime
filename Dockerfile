@@ -8,6 +8,8 @@ COPY . .
 
 CMD npm install -g yarn serve
 
+RUN yarn
+
 RUN yarn build
 
 EXPOSE 5000
