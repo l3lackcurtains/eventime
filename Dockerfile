@@ -4,12 +4,10 @@ WORKDIR /app
 
 COPY ./package.json .
 
-CMD npm install -g yarn
+CMD npm install -g yarn serve
 
-RUN yarn
+RUN yarn build
 
-COPY . .
+EXPOSE 5000
 
-EXPOSE 3000
-
-CMD yarn start
+CMD serve -s build
