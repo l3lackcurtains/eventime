@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY ./package.json .
 
+COPY . .
+
 CMD npm install -g yarn serve
 
 RUN yarn build
