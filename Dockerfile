@@ -1,17 +1,13 @@
-FROM node:10.16.0
+FROM node:10
 
 WORKDIR /app
 
-COPY ./package.json .
+COPY package*.json ./
+
+RUN npm install
 
 COPY . .
 
-CMD npm install -g yarn serve
+EXPOSE 3000
 
-RUN yarn
-
-RUN yarn build
-
-EXPOSE 5000
-
-CMD serve -s build
+CMD [ "npm", "start" ]
