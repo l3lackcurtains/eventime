@@ -6,9 +6,9 @@ COPY ./package.json .
 
 CMD npm install -g yarn
 
-RUN yarn
-
 COPY . .
+
+RUN yarn
 
 EXPOSE 3000
 
