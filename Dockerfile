@@ -1,13 +1,15 @@
-FROM node:10
+FROM node:10.16.0
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ./package.json .
 
-RUN npm install
+CMD npm install -g yarn
+
+RUN yarn
 
 COPY . .
 
 EXPOSE 3000
 
-CMD [ "npm", "start" ]
+CMD yarn start
