@@ -18,13 +18,12 @@ const CreateClient = (props: any) => {
   const createClient = useMutation(CREATE_CLIENT);
   const handleCreateClient = async (values: any, { resetForm }: any) => {
     const { name, details } = values;
-    const created = await createClient({
+    const created: any = await createClient({
       variables: {
         name,
         details
       }
     });
-
     if (created.data.createClient.success) {
       onChangeClientModalState(false);
       resetForm();

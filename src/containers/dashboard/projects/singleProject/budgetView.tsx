@@ -40,7 +40,7 @@ const BudgetView = (props: any) => {
   const handleUpdateBudget = async (values: any) => {
     const { amount, type } = values;
 
-    const updated = await setBudget({
+    const updated: any = await setBudget({
       variables: {
         id: project.id,
         amount,

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Icon, Input, Row, Select, Upload } from "antd";
+import { Button, Col, Form, Icon, Row, Upload } from "antd";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
@@ -13,9 +13,6 @@ import {
 import { CREATE_EXPENSE } from "../../../graphql/expenses/createExpense";
 import { GET_PROJECTS } from "../../../graphql/project/getProjects";
 import { GET_WORKSPACE_USERS } from "../../../graphql/user/getWorkspaceUsers";
-
-const { TextArea } = Input;
-const { Option } = Select;
 
 const createExpenseSchema = Yup.object().shape({
   category: Yup.string().required("Category is Required"),
@@ -104,7 +101,7 @@ const AddExpense = (props: any) => {
   const handleCreateExpense = async (values: any, { resetForm }: any) => {
     const { category, date, amount, project, user, details } = values;
 
-    const created = await createExpense({
+    const created: any = await createExpense({
       variables: {
         category,
         date,

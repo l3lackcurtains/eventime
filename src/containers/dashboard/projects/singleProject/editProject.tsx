@@ -32,7 +32,7 @@ const EditProject = (props: any) => {
   const handleUpdateProject = async (values: any, { resetForm }: any) => {
     const { name, client, members } = values;
 
-    const updated = await updateProject({
+    const updated: any = await updateProject({
       variables: {
         id: project.id,
         name,

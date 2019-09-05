@@ -22,7 +22,7 @@ const AddEstimateButton = (props: any) => {
   const handleAddEstimate = async (values: any, { resetForm }: any) => {
     const { total } = values;
 
-    const added = await addEstimate({
+    const added: any = await addEstimate({
       variables: {
         id: currentTask.id,
         total

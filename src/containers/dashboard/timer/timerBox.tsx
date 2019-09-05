@@ -27,7 +27,7 @@ const TimerBox = (props: any) => {
   }
   const handleStartTimer = async (values: any, { resetForm }: any) => {
     const { task } = values;
-    const started = await startTimer({
+    const started: any = await startTimer({
       variables: {
         taskId: task[2]
       }

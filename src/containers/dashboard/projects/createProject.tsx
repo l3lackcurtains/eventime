@@ -30,7 +30,7 @@ const CreateProject = (props: any) => {
   const handleCreateProject = async (values: any, { resetForm }: any) => {
     const { name, client, members } = values;
 
-    const created = await createProject({
+    const created: any = await createProject({
       variables: {
         name,
         clientId: client,

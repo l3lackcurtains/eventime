@@ -14,7 +14,7 @@ const DashHeader = (props: any) => {
           overlay={
             <Menu>
               <Menu.Item>
-                <a onClick={() => {}}>Edit Profile</a>
+                <a>Edit Profile</a>
               </Menu.Item>
               <Menu.Item>
                 <a

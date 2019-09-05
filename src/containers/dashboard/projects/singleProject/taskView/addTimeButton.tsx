@@ -36,7 +36,7 @@ const AddTimeButton = (props: any) => {
   const handleAddTime = async (values: any, { resetForm }: any) => {
     const { date, duration, description } = values;
 
-    const added = await addTime({
+    const added: any = await addTime({
       variables: {
         taskId: currentTask.id,
         date,

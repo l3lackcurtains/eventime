@@ -35,7 +35,7 @@ const EditTask = (props: any) => {
       content:
         "Deleting the section will also removes all the tasks associated with it.",
       async onOk() {
-        const destroy = await deleteTask({
+        const destroy: any = await deleteTask({
           variables: {
             id: currentTask.id
           }
@@ -53,7 +53,7 @@ const EditTask = (props: any) => {
 
   const handleUpdate = async (values: any) => {
     const { name, description, dueAt } = values;
-    const update = await updateTask({
+    const updated: any = await updateTask({
       variables: {
         id: currentTask.id,
         name,
@@ -62,7 +62,7 @@ const EditTask = (props: any) => {
       }
     });
 
-    if (update.data.updateTask.success) {
+    if (updated.data.updateTask.success) {
       setShowEditTask(false);
       refetchProject();
     }

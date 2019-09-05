@@ -47,7 +47,7 @@ const BillingView = (props: any) => {
   const handleUpdateBilling = async (values: any) => {
     const { rate, type } = values;
 
-    const updated = await setBilling({
+    const updated: any = await setBilling({
       variables: {
         id: project.id,
         rate,
