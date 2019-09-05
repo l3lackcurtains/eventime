@@ -2,7 +2,7 @@ FROM node:10.16.0
 
 WORKDIR /app
 
-COPY ./package.json .
+COPY package*.json ./
 
 CMD npm install -g yarn
 
