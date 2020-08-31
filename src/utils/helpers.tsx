@@ -25,6 +25,9 @@ const dragItemsBetweenArray: any = (
 };
 
 const groupedTimerRecords: any = (data: any) => {
+  if (!data) {
+    return {};
+  }
   const groups = data.reduce((groups: any, rec: any) => {
     const date = rec.date.split("T")[0];
     if (!groups[date]) {
@@ -34,7 +37,7 @@ const groupedTimerRecords: any = (data: any) => {
     return groups;
   }, {});
 
-  const groupArrays = Object.keys(groups).map(date => {
+  const groupArrays = Object.keys(groups).map((date) => {
     const groupByTask = groups[date].reduce((groups: any, rec: any) => {
       const taskId = rec.task.id;
       if (!groups[taskId]) {
@@ -44,7 +47,7 @@ const groupedTimerRecords: any = (data: any) => {
       return groups;
     }, {});
 
-    const groupTaskArray = Object.keys(groupByTask).map(task => {
+    const groupTaskArray = Object.keys(groupByTask).map((task) => {
       const totalDuration = groupByTask[task].reduce(
         (sum: any, dur: any) => parseInt(dur.duration) + sum,
         0
@@ -52,13 +55,13 @@ const groupedTimerRecords: any = (data: any) => {
       return {
         task: groupByTask[task][0].task.name,
         totalDuration,
-        taskRecords: groupByTask[task]
+        taskRecords: groupByTask[task],
       };
     });
 
     return {
       date,
-      dateRecords: groupTaskArray
+      dateRecords: groupTaskArray,
     };
   });
 
@@ -78,5 +81,5 @@ export {
   reorderArray,
   dragItemsBetweenArray,
   groupedTimerRecords,
-  getTaskRecordsTotalHour
+  getTaskRecordsTotalHour,
 };

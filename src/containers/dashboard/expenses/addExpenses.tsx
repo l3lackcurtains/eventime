@@ -1,4 +1,5 @@
-import { Button, Col, Form, Icon, Row, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, Col, Form, Row, Upload } from "antd";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
@@ -8,7 +9,7 @@ import {
   CustomDatePicker,
   CustomSelect,
   CustomTextArea,
-  CustomTextInput
+  CustomTextInput,
 } from "../../../components/fields/formFields";
 import { CREATE_EXPENSE } from "../../../graphql/expenses/createExpense";
 import { GET_PROJECTS } from "../../../graphql/project/getProjects";
@@ -18,42 +19,42 @@ const createExpenseSchema = Yup.object().shape({
   category: Yup.string().required("Category is Required"),
   details: Yup.string().required("Details is required"),
   user: Yup.string().required("Member is required."),
-  project: Yup.string().required("Project is required.")
+  project: Yup.string().required("Project is required."),
 });
 
 const categoryData = [
   {
     key: 1,
     value: "transportation",
-    text: "Transportation"
+    text: "Transportation",
   },
   {
     key: 2,
     value: "infrastracture",
-    text: "Infrastracture"
+    text: "Infrastracture",
   },
   {
     key: 3,
     value: "officeNeed",
-    text: "Office needs"
+    text: "Office needs",
   },
   {
     key: 4,
     value: "service",
-    text: "Service"
+    text: "Service",
   },
   {
     key: 5,
     value: "others",
-    text: "Others"
-  }
+    text: "Others",
+  },
 ];
 
 const AddExpense = (props: any) => {
   const {
     onChangeExpenseModalState,
     refetchExpenses,
-    refetchExpensesStats
+    refetchExpensesStats,
   } = props;
   const [fileList, setFileList] = useState([]);
 
@@ -108,8 +109,8 @@ const AddExpense = (props: any) => {
         amount,
         projectId: project,
         userId: user,
-        details
-      }
+        details,
+      },
     });
 
     if (created.data.createExpense) {
@@ -164,7 +165,7 @@ const AddExpense = (props: any) => {
             <Form.Item>
               <Upload onChange={handleFileChange} multiple fileList={fileList}>
                 <Button>
-                  <Icon type="upload" /> Attachments
+                  <UploadOutlined /> Attachments
                 </Button>
               </Upload>
             </Form.Item>

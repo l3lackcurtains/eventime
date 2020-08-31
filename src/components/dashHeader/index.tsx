@@ -1,4 +1,5 @@
-import { Avatar, Dropdown, Icon, Menu } from "antd";
+import { CaretDownOutlined } from "@ant-design/icons";
+import { Avatar, Dropdown, Menu } from "antd";
 import React from "react";
 import { useMutation } from "react-apollo-hooks";
 import styled from "styled-components";
@@ -35,7 +36,7 @@ const DashHeader = (props: any) => {
         >
           <a className="ant-dropdown-link" href="#">
             <span>
-              Madhav Poudel <Icon type="down" />
+              Madhav Poudel <CaretDownOutlined />
             </span>
             <Avatar size={48} icon="user" />
           </a>

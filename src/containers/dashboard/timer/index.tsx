@@ -1,4 +1,5 @@
-import { Card, Col, Collapse, Icon, List, Row, Tag } from "antd";
+import { CaretRightOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { Card, Col, Collapse, List, Row, Tag } from "antd";
 import moment from "moment";
 import React from "react";
 import { useQuery } from "react-apollo-hooks";
@@ -43,8 +44,7 @@ const Timer = () => {
                         <Row gutter={36} type="flex" justify="space-between">
                           <Col>
                             <div style={{ width: 100 }}>
-                              <Icon
-                                type="clock-circle"
+                              <ClockCircleOutlined
                                 style={{ fontSize: 24, margin: "4px 16px" }}
                               />
                               <p>
@@ -60,8 +60,7 @@ const Timer = () => {
                               bordered={false}
                               defaultActiveKey={["0"]}
                               expandIcon={({ isActive }) => (
-                                <Icon
-                                  type="caret-right"
+                                <CaretRightOutlined
                                   rotate={isActive ? 90 : 0}
                                 />
                               )}

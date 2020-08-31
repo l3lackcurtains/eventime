@@ -1,4 +1,5 @@
-import { Alert, Button, Form, Icon } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Alert, Button, Form } from "antd";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
@@ -9,12 +10,10 @@ import { CustomTextInput } from "../../components/fields/formFields";
 import { LOGIN } from "../../graphql/user/login";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Email is Required"),
+  email: Yup.string().email("Invalid email").required("Email is Required"),
   password: Yup.string()
     .required("Password is required")
-    .min(6, "Password too Short!")
+    .min(6, "Password too Short!"),
 });
 
 const Login = (props: any) => {
@@ -27,14 +26,14 @@ const Login = (props: any) => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={LoginSchema}
-          onSubmit={async values => {
+          onSubmit={async (values) => {
             const { email, password } = values;
             try {
               const logged = await doLogin({
                 variables: {
                   email,
-                  password
-                }
+                  password,
+                },
               });
 
               setLoginErrors([]);
@@ -52,7 +51,7 @@ const Login = (props: any) => {
           render={(props: any) => (
             <Form onSubmit={props.handleSubmit}>
               <CustomTextInput
-                prefix={<Icon type="user" />}
+                prefix={<UserOutlined />}
                 placeholder="email"
                 label="Email"
                 name="email"
@@ -60,7 +59,7 @@ const Login = (props: any) => {
                 size="large"
               />
               <CustomTextInput
-                prefix={<Icon type="lock" />}
+                prefix={<LockOutlined />}
                 type="password"
                 placeholder="Password"
                 label="Password"

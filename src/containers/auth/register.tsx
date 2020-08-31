@@ -1,4 +1,5 @@
-import { Alert, Button, Form, Icon } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Alert, Button, Form } from "antd";
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { useMutation } from "react-apollo-hooks";
@@ -10,16 +11,14 @@ import { REGISTER } from "../../graphql/user/register";
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required("Name is Required"),
-  email: Yup.string()
-    .email("Invalid email")
-    .required("Email is Required"),
+  email: Yup.string().email("Invalid email").required("Email is Required"),
   password: Yup.string()
     .required("Password is required")
     .min(6, "Password too Short!"),
   passwordConfirmation: Yup.string().oneOf(
     [Yup.ref("password"), ""],
     "Passwords must match"
-  )
+  ),
 });
 
 const Register = (props: any) => {
@@ -32,15 +31,15 @@ const Register = (props: any) => {
         <Formik
           initialValues={{ email: "", password: "", name: "" }}
           validationSchema={RegisterSchema}
-          onSubmit={async values => {
+          onSubmit={async (values) => {
             const { email, password, name } = values;
             try {
               const registered = await doRegister({
                 variables: {
                   name,
                   email,
-                  password
-                }
+                  password,
+                },
               });
 
               setRegisterErrors([]);
@@ -58,14 +57,14 @@ const Register = (props: any) => {
           render={(props: any) => (
             <Form onSubmit={props.handleSubmit}>
               <CustomTextInput
-                prefix={<Icon type="user" />}
+                prefix={<UserOutlined />}
                 placeholder="name"
                 label="Name"
                 name="name"
                 size="large"
               />
               <CustomTextInput
-                prefix={<Icon type="user" />}
+                prefix={<UserOutlined />}
                 placeholder="email"
                 label="Email"
                 type="email"
@@ -73,7 +72,7 @@ const Register = (props: any) => {
                 size="large"
               />
               <CustomTextInput
-                prefix={<Icon type="lock" />}
+                prefix={<LockOutlined />}
                 type="password"
                 placeholder="Password"
                 label="Password"
@@ -81,7 +80,7 @@ const Register = (props: any) => {
                 size="large"
               />
               <CustomTextInput
-                prefix={<Icon type="lock" />}
+                prefix={<LockOutlined />}
                 type="password"
                 placeholder="Retype Password"
                 label="Retype Password"

@@ -1,4 +1,12 @@
-import { Icon, Menu } from "antd";
+import {
+  AreaChartOutlined,
+  CheckSquareOutlined,
+  DesktopOutlined,
+  PieChartOutlined,
+  SnippetsOutlined,
+  UsergroupAddOutlined,
+} from "@ant-design/icons";
+import { Menu } from "antd";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
@@ -7,44 +15,44 @@ const menuItems = [
     key: 1,
     name: "Dashboard",
     path: "/dashboard",
-    icon: "pie-chart"
+    icon: <PieChartOutlined />,
   },
   {
     key: 2,
     name: "Timer",
     path: "/dashboard/timer",
-    icon: "desktop"
+    icon: <DesktopOutlined />,
   },
   {
     key: 3,
     name: "Projects",
     path: "/dashboard/projects",
-    icon: "check-square"
+    icon: <CheckSquareOutlined />,
   },
   {
     key: 4,
     name: "Clients",
     path: "/dashboard/clients",
-    icon: "usergroup-add"
+    icon: <UsergroupAddOutlined />,
   },
   {
     key: 5,
     name: "Reports",
     path: "/dashboard/reports",
-    icon: "snippets"
+    icon: <SnippetsOutlined />,
   },
   {
     key: 6,
     name: "Expenses",
     path: "/dashboard/expenses",
-    icon: "pie-chart"
+    icon: <PieChartOutlined />,
   },
   {
     key: 7,
     name: "Invoices",
     path: "/dashboard/invoices",
-    icon: "area-chart"
-  }
+    icon: <AreaChartOutlined />,
+  },
 ];
 
 const DashSideBar = () => {
@@ -67,7 +75,7 @@ const DashSideBar = () => {
       {menuItems.map((menu: any) => (
         <Menu.Item key={menu.key}>
           <NavLink to={menu.path}>
-            <Icon type={menu.icon} />
+            {menu.icon}
             <span className="nav-text">{menu.name}</span>
           </NavLink>
         </Menu.Item>

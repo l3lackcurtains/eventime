@@ -1,4 +1,5 @@
-import { Button, Form, Icon, Popover } from "antd";
+import { CaretDownOutlined } from "@ant-design/icons";
+import { Button, Form, Popover } from "antd";
 import { Formik } from "formik";
 import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
@@ -6,7 +7,7 @@ import styled from "styled-components";
 import { ProjectContext } from ".";
 import {
   CustomSelect,
-  CustomTextInput
+  CustomTextInput,
 } from "../../../../components/fields/formFields";
 import { GET_PROJECT_BILLING } from "../../../../graphql/project/getProjectBilling";
 import { GET_PROJECT_BUDGET } from "../../../../graphql/project/getProjectBudget";
@@ -16,13 +17,13 @@ const typeOptions = [
   {
     key: 1,
     value: "flat_rate",
-    text: "Project Rate"
+    text: "Project Rate",
   },
   {
     key: 2,
     value: "user_rate",
-    text: "User Rate"
-  }
+    text: "User Rate",
+  },
 ];
 
 const BillingView = (props: any) => {
@@ -30,14 +31,14 @@ const BillingView = (props: any) => {
 
   const getBilling = useQuery(GET_PROJECT_BILLING, {
     variables: {
-      id: project.id
-    }
+      id: project.id,
+    },
   });
 
   const getBudget = useQuery(GET_PROJECT_BUDGET, {
     variables: {
-      id: project.id
-    }
+      id: project.id,
+    },
   });
 
   // Billing Edit Area
@@ -51,8 +52,8 @@ const BillingView = (props: any) => {
       variables: {
         id: project.id,
         rate,
-        type
-      }
+        type,
+      },
     });
 
     if (updated.data.setProjectBilling.success) {
@@ -63,7 +64,7 @@ const BillingView = (props: any) => {
   };
   let billingFormData = {
     rate: 0,
-    type: "flat_rate"
+    type: "flat_rate",
   };
   let billingType = "h";
   let rate = 0;
@@ -73,7 +74,7 @@ const BillingView = (props: any) => {
     const billing = getBilling.data.getProjectBilling.result;
     billingFormData = {
       rate: billing.rate,
-      type: billing.type
+      type: billing.type,
     };
 
     billingType =
@@ -123,7 +124,7 @@ const BillingView = (props: any) => {
         </div>
       ) : (
         <a className="ant-dropdown-link" href="#">
-          Billing <Icon type="caret" />
+          Billing <CaretDownOutlined />
         </a>
       )}
     </Popover>
@@ -139,7 +140,8 @@ const CombinedInputs = styled.div`
   }
   .rate-field {
     width: 130px !important;
-  }
+  }import { CaretDownOutlined } from '@ant-design/icons';
+
 `;
 
 export default BillingView;

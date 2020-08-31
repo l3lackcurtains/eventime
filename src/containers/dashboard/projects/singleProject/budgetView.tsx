@@ -1,4 +1,5 @@
-import { Button, Form, Icon, Popover, Progress } from "antd";
+import { CaretDownOutlined } from "@ant-design/icons";
+import { Button, Form, Popover, Progress } from "antd";
 import { Formik } from "formik";
 import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
@@ -6,7 +7,7 @@ import styled from "styled-components";
 import { ProjectContext } from ".";
 import {
   CustomSelect,
-  CustomTextInput
+  CustomTextInput,
 } from "../../../../components/fields/formFields";
 import { GET_PROJECT_BUDGET } from "../../../../graphql/project/getProjectBudget";
 import { SET_PROJECT_BUDGET } from "../../../../graphql/project/setProjectBudget";
@@ -15,13 +16,13 @@ const typeOptions = [
   {
     key: 1,
     value: "money",
-    text: "$"
+    text: "$",
   },
   {
     key: 2,
     value: "time",
-    text: "Hours"
-  }
+    text: "Hours",
+  },
 ];
 
 const BudgetView = (props: any) => {
@@ -29,8 +30,8 @@ const BudgetView = (props: any) => {
 
   const getBudget = useQuery(GET_PROJECT_BUDGET, {
     variables: {
-      id: project.id
-    }
+      id: project.id,
+    },
   });
 
   // Budget Edit Area
@@ -44,8 +45,8 @@ const BudgetView = (props: any) => {
       variables: {
         id: project.id,
         amount,
-        type
-      }
+        type,
+      },
     });
 
     if (updated.data.setProjectBudget.success) {
@@ -60,7 +61,7 @@ const BudgetView = (props: any) => {
 
   let budgetFormData = {
     amount: 0,
-    type: "time"
+    type: "time",
   };
   let budgetType = "h";
   let amount: number = 0;
@@ -70,7 +71,7 @@ const BudgetView = (props: any) => {
   if (budget) {
     budgetFormData = {
       amount: budget.amount,
-      type: budget.type
+      type: budget.type,
     };
 
     budgetType = budget.type === "money" ? "$" : "h";
@@ -122,7 +123,7 @@ const BudgetView = (props: any) => {
         </div>
       ) : (
         <a className="ant-dropdown-link" href="#">
-          Budget <Icon type="caret" />
+          Budget <CaretDownOutlined />
         </a>
       )}
     </Popover>

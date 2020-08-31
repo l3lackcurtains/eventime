@@ -1,14 +1,5 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Icon,
-  Menu,
-  Modal,
-  Tag
-} from "antd";
+import { DownOutlined, SmallDashOutlined } from "@ant-design/icons";
+import { Avatar, Button, Card, Dropdown, Form, Menu, Modal, Tag } from "antd";
 import { Formik } from "formik";
 import React, { useContext, useState } from "react";
 import { useMutation } from "react-apollo-hooks";
@@ -20,13 +11,13 @@ import { CREATE_SECTION } from "../../../../graphql/project/createSection";
 import { CREATE_TASK } from "../../../../graphql/project/createTask";
 import {
   REORDER_TASK,
-  REORDER_TASK_BETWEEN_SECTIONS
+  REORDER_TASK_BETWEEN_SECTIONS,
 } from "../../../../graphql/project/reorderTask";
 import { DELETE_SECTION } from "../../../../graphql/section/deleteSection";
 import {
   dragItemsBetweenArray,
   getTaskRecordsTotalHour,
-  reorderArray
+  reorderArray,
 } from "../../../../utils/helpers";
 import BillingView from "./billingView";
 import BudgetView from "./budgetView";
@@ -40,12 +31,12 @@ import {
   ProjectCard,
   ProjectCards,
   ProjectWrapper,
-  TaskDropdown
+  TaskDropdown,
 } from "./styled";
 import TaskView from "./taskView";
 
 const CreateTaskSchema = Yup.object().shape({
-  name: Yup.string().required("Name is Required")
+  name: Yup.string().required("Name is Required"),
 });
 
 const ProjectView = (props: any) => {
@@ -75,7 +66,7 @@ const ProjectView = (props: any) => {
 
   const [currentTask, setCurrentTask] = useState({
     sectionIndex: 0,
-    taskIndex: 0
+    taskIndex: 0,
   });
 
   // delete section
@@ -105,8 +96,8 @@ const ProjectView = (props: any) => {
       await createSection({
         variables: {
           projectId: projectTasks.id,
-          name
-        }
+          name,
+        },
       });
       setAddProjectAreaButton(true);
       resetForm();
@@ -129,8 +120,8 @@ const ProjectView = (props: any) => {
       await createTask({
         variables: {
           sectionId: allTasks.sections[sectionIndex].id,
-          name
-        }
+          name,
+        },
       });
       resetForm();
       setTaskCardAddSection("");
@@ -151,8 +142,8 @@ const ProjectView = (props: any) => {
       async onOk() {
         await deleteSection({
           variables: {
-            id
-          }
+            id,
+          },
         });
         refetchProject();
         Modal.destroyAll();
@@ -161,7 +152,7 @@ const ProjectView = (props: any) => {
         Modal.destroyAll();
       },
       zIndex: 1000000,
-      maskClosable: true
+      maskClosable: true,
     });
   };
 
@@ -185,8 +176,8 @@ const ProjectView = (props: any) => {
         variables: {
           sectionId: projectTasks.sections[taskId].id,
           from: source.index,
-          to: destination.index
-        }
+          to: destination.index,
+        },
       });
       setTimeout(() => refetchProject(), 1000);
     } else {
@@ -209,8 +200,8 @@ const ProjectView = (props: any) => {
           sourceSectionId: projectTasks.sections[srcTaskId].id,
           destinationSectionId: projectTasks.sections[destTaskId].id,
           from: source.index,
-          to: destination.index
-        }
+          to: destination.index,
+        },
       });
       setTimeout(() => refetchProject(), 1000);
     }
@@ -237,10 +228,7 @@ const ProjectView = (props: any) => {
             trigger={["click"]}
           >
             <a className="ant-dropdown-link" href="#">
-              <Icon
-                type="small-dash"
-                style={{ fontSize: 28, fontWeight: 700 }}
-              />
+              <SmallDashOutlined style={{ fontSize: 28, fontWeight: 700 }} />
             </a>
           </Dropdown>
         </div>
@@ -251,7 +239,7 @@ const ProjectView = (props: any) => {
       </CustomHeader>
 
       <ProjectWrapper>
-        <DragDropContext onDragEnd={res => onDragCardEnd(res)}>
+        <DragDropContext onDragEnd={(res) => onDragCardEnd(res)}>
           {projectTasks.sections.map((section: any, sectionIndex: any) => (
             <ProjectArea key={section.id}>
               <TaskDropdown
@@ -286,14 +274,14 @@ const ProjectView = (props: any) => {
                 <div className="ant-dropdown-link">
                   <span>{section.name}</span>
                   <span>
-                    <Tag color="magenta">4</Tag> <Icon type="down" />
+                    <Tag color="magenta">4</Tag> <DownOutlined />
                   </span>
                 </div>
               </TaskDropdown>
               <p>11h 35m</p>
 
               <Droppable droppableId={`droppable-${sectionIndex}`}>
-                {provided => (
+                {(provided) => (
                   <ProjectCards
                     {...provided.droppableProps}
                     ref={provided.innerRef}
@@ -305,7 +293,7 @@ const ProjectView = (props: any) => {
                           draggableId={task.id}
                           index={taskIndex}
                         >
-                          {provided => (
+                          {(provided) => (
                             <div
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
@@ -335,7 +323,7 @@ const ProjectView = (props: any) => {
                                     <Avatar
                                       size="small"
                                       style={{
-                                        backgroundColor: "#87d068"
+                                        backgroundColor: "#87d068",
                                       }}
                                       icon="user"
                                     />
